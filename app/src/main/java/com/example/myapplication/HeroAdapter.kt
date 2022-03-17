@@ -26,7 +26,6 @@ class HeroAdapter(private val mContext: Context, private val mHero: MutableList<
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        TODO("Not yet implemented")
         val inflater = LayoutInflater.from(mContext)
         val heroView = inflater.inflate(R.layout.hero_item, parent, false)
         val viewHolder = ViewHolder(heroView)
@@ -34,7 +33,6 @@ class HeroAdapter(private val mContext: Context, private val mHero: MutableList<
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
         val hero = mHero[position]
         Glide.with(mContext).load(hero.image).into(holder.mImageHero)
         holder.mTextName.text = hero.name
@@ -42,7 +40,6 @@ class HeroAdapter(private val mContext: Context, private val mHero: MutableList<
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
         return mHero.size
     }
 }
