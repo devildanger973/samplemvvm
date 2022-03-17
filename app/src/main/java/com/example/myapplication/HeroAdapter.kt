@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 
-class HeroAdapter(private val mContext: Context, private val mHero: MutableList<Hero>) :
+class HeroAdapter(private val mContext: Context) :
     RecyclerView.Adapter<HeroAdapter.ViewHolder?>() {
+     private var mHero = mutableListOf<Hero>()
     inner class ViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mImageHero: ImageView
         val mTextName: TextView
@@ -25,6 +26,12 @@ class HeroAdapter(private val mContext: Context, private val mHero: MutableList<
         }
     }
 
+     fun setList(list: MutableList<Hero>){
+        mHero.clear()
+        mHero.addAll(list)
+         notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(mContext)
         val heroView = inflater.inflate(R.layout.hero_item, parent, false)
@@ -34,7 +41,13 @@ class HeroAdapter(private val mContext: Context, private val mHero: MutableList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val hero = mHero[position]
+        if(hero.image!=-1)
         Glide.with(mContext).load(hero.image).into(holder.mImageHero)
+        else{
+           if (hero.imagePath!=null)
+               Glide.with(mContext).load(hero.imagePath).into(holder.mImageHero)
+
+        }
         holder.mTextName.text = hero.name
 
     }
