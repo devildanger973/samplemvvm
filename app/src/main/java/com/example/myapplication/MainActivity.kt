@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -8,22 +9,25 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_ONE
+import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_TWO
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mHeros:MutableList<Hero>
     private lateinit var  mRecyclerHero:RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
-
-
+    val PICK_IMAGE = 1
+    lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
         mRecyclerHero=findViewById(R.id.recyclerHero)
         mHeros= mutableListOf<Hero>()
@@ -33,16 +37,33 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClick(item: Hero?) {
                 startImageEditor()
             }
+            override fun onOpenFolderClick() {
+                startGalleryForResult()
+
+            }
         })
         mRecyclerHero.adapter=mHeroAdapter
         //mRecyclerHero.layoutManager=LinearLayoutManager(this)
         mRecyclerHero.layoutManager=gridLayoutManager
         askPermission()
 
-//Click Image=======================================================================
+        resultLauncher  = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // There are no request codes
+                val data: Intent? = result.data
+
+            }
+        }
 
     }
+    fun startGalleryForResult() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_PICK
+        intent.type = "image/*"
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
+        resultLauncher.launch(intent)
+    }
     private fun startImageEditor(){
         val myIntent = Intent(this, ImageEditorActivity::class.java)
         this.startActivity(myIntent)
@@ -79,23 +100,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun listAllImage(){
+        mHeros.add(Hero("",viewType = VIEW_TYPE_TWO))
         val isSDPresent = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
         if(!isSDPresent) return
         val columns = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID)
         val orderBy = MediaStore.Images.Media._ID
-//Stores all the images from the gallery in Cursor
 //Stores all the images from the gallery in Cursor
         val cursor: Cursor? = contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
             null, orderBy
         )
 //Total number of images
-//Total number of images
         val count: Int = cursor?.count ?:0
 
-//Create an array to store path to all the images
-
-//Create an array to store path to all the images
         val arrPath = arrayOfNulls<String>(count)
 
         for (i in 0 until count) {
@@ -103,19 +120,18 @@ class MainActivity : AppCompatActivity() {
             val dataColumnIndex: Int = cursor?.getColumnIndex(MediaStore.Images.Media.DATA)?:0
             //Store the path of the image
             arrPath[i] = cursor?.getString(dataColumnIndex)
-            mHeros.add(Hero("image $i", imagePath = cursor?.getString(dataColumnIndex).orEmpty()))
+            mHeros.add(Hero(name ="image $i",imagePath = cursor?.getString(dataColumnIndex).orEmpty(), viewType = VIEW_TYPE_ONE))
             Log.i("PATH", arrPath[i].orEmpty())
         }
-// The cursor should be freed up after use with close()
 // The cursor should be freed up after use with close()
         cursor?.close()
     }
     private fun creatHeroList()
     {
-        mHeros.add(Hero("thor", R.drawable.thor))
-        mHeros.add(Hero("ironmen", R.drawable.dafodil))
-        mHeros.add(Hero("hulk", R.drawable.hulk))
-        mHeros.add(Hero("spidermen", R.drawable.spiderman))
+        //mHeros.add(Hero("thor", R.drawable.thor,))
+        //mHeros.add(Hero("ironmen", R.drawable.dafodil))
+        //mHeros.add(Hero("hulk", R.drawable.hulk))
+        //mHeros.add(Hero("spidermen", R.drawable.spiderman))
 
         //mHeros.add(Hero("sad", com.google.android.material.R.drawable.notification_template_icon_low_bg))
 

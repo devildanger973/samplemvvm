@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/image_view"
-        android:src="@drawable/dafodil"
+        android:src="@drawable/spiderman"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

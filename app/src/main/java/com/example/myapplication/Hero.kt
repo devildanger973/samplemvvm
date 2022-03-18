@@ -1,3 +1,3 @@
 package com.example.myapplication
 
-data class Hero(var name: String, var image: Int=-1, var imagePath:String?=null)
+data class Hero(var name:String, var image: Int = -1, var imagePath: String? = null, val viewType: Int)
