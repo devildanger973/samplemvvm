@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 
-class HeroAdapter(private val mContext: Context) :
+class HeroAdapter(private val mContext: Context, private val listener:OnItemClickListener) :
     RecyclerView.Adapter<HeroAdapter.ViewHolder?>() {
      private var mHero = mutableListOf<Hero>()
     inner class ViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,7 +23,14 @@ class HeroAdapter(private val mContext: Context) :
         init {
             mImageHero = itemView.findViewById(R.id.image_hero)
             mTextName = itemView.findViewById(R.id.text_name)
+
         }
+
+       fun bind(item:Hero){
+           mImageHero.setOnClickListener{
+               listener.onItemClick(item)
+           }
+       }
     }
 
      fun setList(list: MutableList<Hero>){
@@ -49,11 +56,15 @@ class HeroAdapter(private val mContext: Context) :
 
         }
         holder.mTextName.text = hero.name
+        holder.bind(item = hero)
 
     }
 
     override fun getItemCount(): Int {
         return mHero.size
+    }
+    interface OnItemClickListener {
+        fun onItemClick(item: Hero?)
     }
 }
 

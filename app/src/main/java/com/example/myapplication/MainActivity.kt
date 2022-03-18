@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mHeroAdapter: HeroAdapter
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,15 +28,24 @@ class MainActivity : AppCompatActivity() {
         mRecyclerHero=findViewById(R.id.recyclerHero)
         mHeros= mutableListOf<Hero>()
         val gridLayoutManager = GridLayoutManager(applicationContext, 3)
-
         creatHeroList()
-        mHeroAdapter= HeroAdapter(this)
+        mHeroAdapter= HeroAdapter(this, object: HeroAdapter.OnItemClickListener{
+            override fun onItemClick(item: Hero?) {
+                startImageEditor()
+            }
+        })
         mRecyclerHero.adapter=mHeroAdapter
         //mRecyclerHero.layoutManager=LinearLayoutManager(this)
         mRecyclerHero.layoutManager=gridLayoutManager
         askPermission()
 
+//Click Image=======================================================================
 
+    }
+
+    private fun startImageEditor(){
+        val myIntent = Intent(this, ImageEditorActivity::class.java)
+        this.startActivity(myIntent)
     }
     private fun askPermission(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
