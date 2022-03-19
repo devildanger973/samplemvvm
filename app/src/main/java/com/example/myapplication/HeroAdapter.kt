@@ -45,15 +45,12 @@ class HeroAdapter(private val mContext: Context, private val listener:OnItemClic
             }
         }
     }
-
      fun setList(list: MutableList<Hero>){
         mHero.clear()
         mHero.addAll(list)
          notifyDataSetChanged()
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  RecyclerView.ViewHolder {
-
         if (viewType == VIEW_TYPE_ONE) {
             val inflater = LayoutInflater.from(mContext)
             val heroView = inflater.inflate(R.layout.hero_item, parent, false)
@@ -65,15 +62,10 @@ class HeroAdapter(private val mContext: Context, private val listener:OnItemClic
         val viewHolder2 = ViewHolder2(heroView)
         return viewHolder2
     }
-
-
     override fun getItemViewType(position: Int): Int {
         return mHero[position].viewType
     }
-
     override fun onBindViewHolder(holder:  RecyclerView.ViewHolder, position: Int) {
-
-
         val hero = mHero[position]
         when(hero.viewType){
             VIEW_TYPE_ONE ->{
@@ -82,7 +74,6 @@ class HeroAdapter(private val mContext: Context, private val listener:OnItemClic
                 else{
                     if (hero.imagePath !=null)
                         Glide.with(mContext).load(hero.imagePath).into((holder as ViewHolder).mImageHero)
-
                 }
                 (holder as ViewHolder).mTextName.text = hero.name
                 holder.bind(item = hero)
@@ -93,17 +84,12 @@ class HeroAdapter(private val mContext: Context, private val listener:OnItemClic
                 else{
                     if (hero.imagePath !=null)
                         Glide.with(mContext).load(hero.imagePath).into((holder as ViewHolder2).mImageHero)
-
                 }
                 (holder as ViewHolder2).mTextName.text = hero.name
                 holder.bind(item = hero)
             }
         }
-
-
-
     }
-
     override fun getItemCount(): Int {
         return mHero.size
     }

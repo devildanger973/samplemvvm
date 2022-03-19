@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mHeros:MutableList<Hero>
     private lateinit var  mRecyclerHero:RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
-    val PICK_IMAGE = 1
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,12 +46,11 @@ class MainActivity : AppCompatActivity() {
         //mRecyclerHero.layoutManager=LinearLayoutManager(this)
         mRecyclerHero.layoutManager=gridLayoutManager
         askPermission()
-
+        setupFloatingActionButton()
         resultLauncher  = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val data: Intent? = result.data
-
             }
         }
 
@@ -61,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         intent.action = Intent.ACTION_PICK
         intent.type = "image/*"
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
         resultLauncher.launch(intent)
     }
     private fun startImageEditor(){
@@ -135,5 +133,13 @@ class MainActivity : AppCompatActivity() {
 
         //mHeros.add(Hero("sad", com.google.android.material.R.drawable.notification_template_icon_low_bg))
 
+    }
+//floating button click======================================================
+private fun setupFloatingActionButton() {
+    val fab: ImageView = findViewById(R.id.fab)
+    fab.setOnClickListener { view ->
+        startGalleryForResult()
+
+        }
     }
 }

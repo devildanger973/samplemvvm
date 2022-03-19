@@ -12,7 +12,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:scaleType="center"
-        android:src="@drawable/spiderman"
+        android:src="@android:drawable/ic_menu_gallery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,12 +26,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="TextView"
-        android:textColor="#FAF7F7"
+        android:text="Open photos"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="@+id/image_hero"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.112"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/image_hero"
-        app:layout_constraintVertical_bias="1.0" />
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
