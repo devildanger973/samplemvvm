@@ -1,15 +1,21 @@
 package com.example.myapplication
 
 import android.Manifest
+import android.R.attr.bitmap
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +24,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_ONE
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_TWO
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
+import java.io.FileOutputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  mRecyclerHero:RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var cameraResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,27 +49,31 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onOpenFolderClick() {
                 startGalleryForResult()
-
             }
         })
         mRecyclerHero.adapter=mHeroAdapter
         //mRecyclerHero.layoutManager=LinearLayoutManager(this)
         mRecyclerHero.layoutManager=gridLayoutManager
         askPermission()
-        setupFloatingActionButton()
+        val mFloatingActionButton: FloatingActionButton= findViewById(R.id.camera)
+        mFloatingActionButton.setOnClickListener(){
+            takePicture.launch(null)
+        }
         resultLauncher  = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val data: Intent? = result.data
             }
         }
+        /*cameraResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
 
+                }
+            }*/
     }
     fun startGalleryForResult() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_PICK
-        intent.type = "image/*"
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         resultLauncher.launch(intent)
     }
     private fun startImageEditor(){
@@ -76,11 +90,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             1 -> {
@@ -89,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                     listAllImage()
                     mHeroAdapter.setList(mHeros)
                 } else {
-                  //  askPermission()
+                    //askPermission()
                 }
                 return
             }
@@ -134,12 +144,27 @@ class MainActivity : AppCompatActivity() {
         //mHeros.add(Hero("sad", com.google.android.material.R.drawable.notification_template_icon_low_bg))
 
     }
-//floating button click======================================================
-private fun setupFloatingActionButton() {
-    val fab: ImageView = findViewById(R.id.fab)
-    fab.setOnClickListener { view ->
-        startGalleryForResult()
 
+    private val takePicture =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            saveFile(bitmap)
         }
+
+    private fun saveFile(bitmap: Bitmap){
+        val contextWrapper  =  ContextWrapper(applicationContext)
+        val directory = contextWrapper.getDir(filesDir.name, Context.MODE_PRIVATE)
+        val file = File(directory,"fileName.png")
+        val fos = FileOutputStream(file.absolutePath, true) // save
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        Log.d("filepath","filepath ${file.absolutePath} length ${file.length()}")
+        fos.close()
+        val myIntent = Intent(this, ImageEditorActivity::class.java)
+        myIntent.putExtra("FILE_PATH",file.absolutePath)
+        this.startActivity(myIntent)
+
     }
+
+
 }
+
+
