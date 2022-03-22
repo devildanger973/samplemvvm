@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.Manifest
-import android.R.attr.bitmap
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
@@ -9,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.ComposePathEffect
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  mRecyclerHero:RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private lateinit var cameraResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +41,14 @@ class MainActivity : AppCompatActivity() {
         mRecyclerHero=findViewById(R.id.recyclerHero)
         mHeros= mutableListOf<Hero>()
         val gridLayoutManager = GridLayoutManager(applicationContext, 3)
-        creatHeroList()
+        //creatHeroList()
         mHeroAdapter= HeroAdapter(this, object: HeroAdapter.OnItemClickListener{
             override fun onItemClick(item: Hero?) {
-                startImageEditor()
+                item?.imagePath?.let { startImageEditor(imagePath = it) }
             }
             override fun onOpenFolderClick() {
                 startGalleryForResult()
+
             }
         })
         mRecyclerHero.adapter=mHeroAdapter
@@ -63,12 +63,15 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val data: Intent? = result.data
+
+                val myIntent = Intent(this, ImageEditorActivity::class.java)
+                myIntent.putExtra("FILE_PATH",data?.data.toString())
+                this.startActivity(myIntent)
             }
         }
         /*cameraResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val data: Intent? = result.data
-
                 }
             }*/
     }
@@ -76,8 +79,10 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         resultLauncher.launch(intent)
     }
-    private fun startImageEditor(){
+    private fun startImageEditor(imagePath: String){
+
         val myIntent = Intent(this, ImageEditorActivity::class.java)
+        myIntent.putExtra("FILE_PATH",imagePath)
         this.startActivity(myIntent)
     }
     private fun askPermission(){
@@ -128,7 +133,10 @@ class MainActivity : AppCompatActivity() {
             val dataColumnIndex: Int = cursor?.getColumnIndex(MediaStore.Images.Media.DATA)?:0
             //Store the path of the image
             arrPath[i] = cursor?.getString(dataColumnIndex)
-            mHeros.add(Hero(name ="image $i",imagePath = cursor?.getString(dataColumnIndex).orEmpty(), viewType = VIEW_TYPE_ONE))
+            mHeros.add(Hero(
+                name ="image $i",
+                imagePath = cursor?.getString(dataColumnIndex).orEmpty()
+            ,viewType = VIEW_TYPE_ONE))
             Log.i("PATH", arrPath[i].orEmpty())
         }
 // The cursor should be freed up after use with close()
@@ -153,7 +161,7 @@ class MainActivity : AppCompatActivity() {
     private fun saveFile(bitmap: Bitmap){
         val contextWrapper  =  ContextWrapper(applicationContext)
         val directory = contextWrapper.getDir(filesDir.name, Context.MODE_PRIVATE)
-        val file = File(directory,"fileName.png")
+        val file = File(directory,"fileName")
         val fos = FileOutputStream(file.absolutePath, true) // save
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
         Log.d("filepath","filepath ${file.absolutePath} length ${file.length()}")
@@ -161,10 +169,8 @@ class MainActivity : AppCompatActivity() {
         val myIntent = Intent(this, ImageEditorActivity::class.java)
         myIntent.putExtra("FILE_PATH",file.absolutePath)
         this.startActivity(myIntent)
-
     }
 
 
 }
-
 

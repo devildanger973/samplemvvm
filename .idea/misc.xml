@@ -3,11 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/activity_image.xml" value="0.1" />
+        <entry key="..\:/project2/samplemvvm/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1095" />
+        <entry key="..\:/project2/samplemvvm/app/src/main/res/drawable/roundsquare_button.xml" value="0.1095" />
+        <entry key="..\:/project2/samplemvvm/app/src/main/res/layout-v26/activity_image.xml" value="0.20416666666666666" />
+        <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/activity_image.xml" value="0.25" />
         <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/floating_button.xml" value="0.20416666666666666" />
         <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/hero_item.xml" value="0.17074275362318841" />
-        <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/hero_item_open_photo.xml" value="0.18" />
+        <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/hero_item_open_photo.xml" value="0.33" />
       </map>
     </option>
   </component>

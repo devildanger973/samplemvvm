@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -18,49 +19,40 @@ class HeroAdapter(private val mContext: Context, private val listener:OnItemClic
         const val VIEW_TYPE_ONE = 1
         const val VIEW_TYPE_TWO = 2
     }
-     private var mHero = mutableListOf<Hero>()
+    private var mHero = mutableListOf<Hero>()
     inner class ViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val mImageHero: ImageView
-        val mTextName: TextView
-        init {
-            mImageHero = itemView.findViewById(R.id.image_hero)
-            mTextName = itemView.findViewById(R.id.text_name)
-        }
-       fun bind(item:Hero){
+        val mImageHero: ImageView = itemView.findViewById(R.id.image_hero)
+        val mTextName: TextView = itemView.findViewById(R.id.text_name)
+        fun bind(item:Hero){
            mImageHero.setOnClickListener{
                listener.onItemClick(item)
            }
        }
     }
     inner class ViewHolder2(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val mImageHero: ImageView
-        val mTextName: TextView
-        init {
-            mImageHero = itemView.findViewById(R.id.image_hero)
-            mTextName = itemView.findViewById(R.id.text_name)
-        }
-        fun bind(item:Hero){
+        val mImageHero: ImageView = itemView.findViewById(R.id.image_hero1)
+        val mTextName: TextView = itemView.findViewById(R.id.text_name1)
+        fun bind() {
             mImageHero.setOnClickListener{
                 listener.onOpenFolderClick()
             }
         }
     }
+     @SuppressLint("NotifyDataSetChanged")
      fun setList(list: MutableList<Hero>){
         mHero.clear()
         mHero.addAll(list)
          notifyDataSetChanged()
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ONE) {
             val inflater = LayoutInflater.from(mContext)
             val heroView = inflater.inflate(R.layout.hero_item, parent, false)
-            val viewHolder = ViewHolder(heroView)
-            return viewHolder
+            return ViewHolder(heroView)
         }
         val inflater = LayoutInflater.from(mContext)
         val heroView = inflater.inflate(R.layout.hero_item_open_photo, parent, false)
-        val viewHolder2 = ViewHolder2(heroView)
-        return viewHolder2
+        return ViewHolder2(heroView)
     }
     override fun getItemViewType(position: Int): Int {
         return mHero[position].viewType
@@ -86,7 +78,7 @@ class HeroAdapter(private val mContext: Context, private val listener:OnItemClic
                         Glide.with(mContext).load(hero.imagePath).into((holder as ViewHolder2).mImageHero)
                 }
                 (holder as ViewHolder2).mTextName.text = hero.name
-                holder.bind(item = hero)
+                holder.bind()
             }
         }
     }
