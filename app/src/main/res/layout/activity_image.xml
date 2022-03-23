@@ -8,13 +8,11 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/spiderman"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:ignore="MissingConstraints"
-        app:layout_constraintBottom_toTopOf="@id/HD2"
         />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/close"
         android:layout_width="wrap_content"
@@ -60,6 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="8dp"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -72,8 +71,10 @@
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toStartOf="@+id/activity_image"
         tools:ignore="MissingConstraints"
-        app:fabCustomSize="50dp"
+        app:fabCustomSize="40dp"
         android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -87,7 +88,9 @@
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toEndOf="@id/HD"
         tools:ignore="MissingConstraints"
-        app:fabCustomSize="50dp"
+        app:fabCustomSize="40dp"
+        android:layout_marginBottom="8dp"
+
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/HD2"
@@ -100,7 +103,9 @@
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toEndOf="@id/HD1"
         tools:ignore="MissingConstraints"
-        app:fabCustomSize="50dp"
+        app:fabCustomSize="40dp"
+        android:layout_marginBottom="8dp"
+
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/HD3"
@@ -113,7 +118,9 @@
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toEndOf="@id/HD2"
         tools:ignore="MissingConstraints"
-        app:fabCustomSize="50dp"
+        app:fabCustomSize="40dp"
+        android:layout_marginBottom="8dp"
+
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/HD4"
@@ -128,7 +135,8 @@
         tools:ignore="MissingConstraints"
         app:layout_constraintEnd_toEndOf="@id/activity_image"
         android:layout_marginEnd="16dp"
-        app:fabCustomSize="50dp"
+        app:fabCustomSize="40dp"
+        android:layout_marginBottom="8dp"
 
         />
 
