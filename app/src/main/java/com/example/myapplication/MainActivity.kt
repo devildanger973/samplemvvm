@@ -41,14 +41,12 @@ class MainActivity : AppCompatActivity() {
         mRecyclerHero=findViewById(R.id.recyclerHero)
         mHeros= mutableListOf<Hero>()
         val gridLayoutManager = GridLayoutManager(applicationContext, 3)
-        //creatHeroList()
         mHeroAdapter= HeroAdapter(this, object: HeroAdapter.OnItemClickListener{
             override fun onItemClick(item: Hero?) {
                 item?.imagePath?.let { startImageEditor(imagePath = it) }
             }
             override fun onOpenFolderClick() {
                 startGalleryForResult()
-
             }
         })
         mRecyclerHero.adapter=mHeroAdapter
@@ -57,34 +55,29 @@ class MainActivity : AppCompatActivity() {
         askPermission()
         val mFloatingActionButton: FloatingActionButton= findViewById(R.id.camera)
         mFloatingActionButton.setOnClickListener(){
+
             takePicture.launch(null)
         }
         resultLauncher  = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val data: Intent? = result.data
-
                 val myIntent = Intent(this, ImageEditorActivity::class.java)
                 myIntent.putExtra("FILE_PATH",data?.data.toString())
                 this.startActivity(myIntent)
             }
         }
-        /*cameraResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val data: Intent? = result.data
-                }
-            }*/
     }
     fun startGalleryForResult() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         resultLauncher.launch(intent)
     }
     private fun startImageEditor(imagePath: String){
-
         val myIntent = Intent(this, ImageEditorActivity::class.java)
         myIntent.putExtra("FILE_PATH",imagePath)
         this.startActivity(myIntent)
     }
+
     private fun askPermission(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
@@ -148,21 +141,17 @@ class MainActivity : AppCompatActivity() {
         //mHeros.add(Hero("ironmen", R.drawable.dafodil))
         //mHeros.add(Hero("hulk", R.drawable.hulk))
         //mHeros.add(Hero("spidermen", R.drawable.spiderman))
-
         //mHeros.add(Hero("sad", com.google.android.material.R.drawable.notification_template_icon_low_bg))
-
     }
-
     private val takePicture =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             saveFile(bitmap)
         }
-
     private fun saveFile(bitmap: Bitmap){
         val contextWrapper  =  ContextWrapper(applicationContext)
         val directory = contextWrapper.getDir(filesDir.name, Context.MODE_PRIVATE)
         val file = File(directory,"fileName")
-        val fos = FileOutputStream(file.absolutePath, true) // save
+        val fos = FileOutputStream(file.absolutePath, false) // save
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
         Log.d("filepath","filepath ${file.absolutePath} length ${file.length()}")
         fos.close()
@@ -170,7 +159,5 @@ class MainActivity : AppCompatActivity() {
         myIntent.putExtra("FILE_PATH",file.absolutePath)
         this.startActivity(myIntent)
     }
-
-
 }
 
