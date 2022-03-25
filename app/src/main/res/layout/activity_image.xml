@@ -10,34 +10,46 @@
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="MissingConstraints"
         />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintTop_toTopOf="@+id/activity_image"
+        app:layout_constraintStart_toStartOf="@+id/activity_image"
+        app:layout_constraintEnd_toEndOf="@+id/activity_image"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_image"
+
+        />
+    <Button
         android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@drawable/circle_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_margin="16dp"
-        app:fabCustomSize="30dp"
+        android:text="x"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/activity_image"
         app:layout_constraintTop_toTopOf="@+id/activity_image"
-        android:contentDescription="@string/floating"
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         tools:ignore="MissingConstraints" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/circle_button"
         android:layout_margin="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:contentDescription="@string/floating"
         android:src="@android:drawable/ic_menu_share"
-        app:fabCustomSize="30dp"
         app:layout_constraintEnd_toStartOf="@+id/save"
         app:layout_constraintTop_toTopOf="@+id/activity_image"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+
+        />
 
     <Button
         android:id="@+id/save"
@@ -61,82 +73,75 @@
         android:layout_marginBottom="8dp"
         />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/HD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:contentDescription="@string/floating"
+        android:background="@drawable/circle_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
         android:src="@android:drawable/ic_menu_view"
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toStartOf="@+id/activity_image"
-        tools:ignore="MissingConstraints"
-        app:fabCustomSize="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-
+        app:layout_constraintEnd_toStartOf="@+id/HD1"
         />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/HD1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginStart="28dp"
-        android:contentDescription="@string/floating"
+        android:background="@drawable/circle_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="8dp"
         android:src="@android:drawable/ic_menu_view"
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toEndOf="@id/HD"
-        tools:ignore="MissingConstraints"
-        app:fabCustomSize="40dp"
-        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/HD2"
+
 
         />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+    <Button
         android:id="@+id/HD2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginStart="28dp"
-        android:contentDescription="@string/floating"
+        android:background="@drawable/circle_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="8dp"
         android:src="@android:drawable/ic_menu_view"
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toEndOf="@id/HD1"
-        tools:ignore="MissingConstraints"
-        app:fabCustomSize="40dp"
-        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/HD3"
+
 
         />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+    <Button
         android:id="@+id/HD3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginStart="28dp"
-        android:contentDescription="@string/floating"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/circle_button"
         android:src="@android:drawable/ic_menu_view"
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
         app:layout_constraintStart_toEndOf="@id/HD2"
-        tools:ignore="MissingConstraints"
-        app:fabCustomSize="40dp"
-        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/HD4"
 
         />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+    <Button
         android:id="@+id/HD4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginStart="28dp"
-        android:contentDescription="@string/floating"
+        android:background="@drawable/circle_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:src="@android:drawable/ic_menu_view"
         app:layout_constraintBottom_toTopOf="@id/recyclerList"
-        app:layout_constraintStart_toEndOf="@id/HD3"
-        tools:ignore="MissingConstraints"
         app:layout_constraintEnd_toEndOf="@id/activity_image"
-        android:layout_marginEnd="16dp"
-        app:fabCustomSize="40dp"
-        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toEndOf="@id/HD3"
 
         />
 
