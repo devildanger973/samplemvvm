@@ -4,7 +4,9 @@
     android:id="@+id/activity_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
 
     <ImageView
         android:id="@+id/image_view"
@@ -23,20 +25,18 @@
         app:layout_constraintBottom_toBottomOf="@+id/activity_image"
 
         />
-    <Button
+    <ImageButton
         android:id="@+id/close"
         android:background="@drawable/circle_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="16dp"
-        android:text="x"
-        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/activity_image"
         app:layout_constraintTop_toTopOf="@+id/activity_image"
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         tools:ignore="MissingConstraints" />
 
-    <Button
+    <ImageButton
         android:id="@+id/share"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -73,7 +73,7 @@
         android:layout_marginBottom="8dp"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/HD"
         android:background="@drawable/circle_button"
         android:layout_width="50dp"
@@ -86,7 +86,7 @@
         app:layout_constraintEnd_toStartOf="@+id/HD1"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/HD1"
         android:background="@drawable/circle_button"
         android:layout_width="50dp"
@@ -101,7 +101,7 @@
 
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/HD2"
         android:background="@drawable/circle_button"
         android:layout_width="50dp"
@@ -116,7 +116,7 @@
 
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/HD3"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -131,7 +131,7 @@
 
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/HD4"
         android:background="@drawable/circle_button"
         android:layout_width="50dp"

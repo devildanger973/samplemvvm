@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.app.Activity
-import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -49,15 +48,17 @@ class ImageEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
         val filePath = intent.getStringExtra("FILE_PATH")
+        Log.d("check", "oncreate android > Q $filePath")
+
         val mPhotograp: ImageView = findViewById(R.id.image_view)
         val uri: Uri = Uri.parse(filePath)
         mPhotograp.setImageURI(uri)
         val save: Button = findViewById(R.id.save)
-        val close: Button = findViewById(R.id.close)
+        val close: ImageButton = findViewById(R.id.close)
         close.setOnClickListener() {
             finish()
         }
-        val share: Button = findViewById(R.id.share)
+        val share: ImageButton = findViewById(R.id.share)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.GONE
         share.setOnClickListener() {
@@ -108,7 +109,7 @@ class ImageEditorActivity : AppCompatActivity() {
             if (bitmap != null) {
                 path = saveMediaToStorage(bitmap)
             }
-            setNotificationChannelIntent(id,imagePath = path)
+            setNotificationChannelIntent(id, imagePath = path)
             finish()
         }
         mRecyclerList = findViewById(R.id.recyclerList)
@@ -141,12 +142,15 @@ class ImageEditorActivity : AppCompatActivity() {
     }
 
     private fun setNotificationChannelIntent(id: String, imagePath: String) {
-        val intent = Intent(this, ImageEditorActivity::class.java).apply {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("FILE_PATH", imagePath)
+            putExtra("START_FROM_NOTI", true)
+            Log.d("check", " android > Q $imagePath")
+
         }
         val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder = NotificationCompat.Builder(this, id)
             .setSmallIcon(R.drawable.notification_icon)
@@ -169,7 +173,7 @@ class ImageEditorActivity : AppCompatActivity() {
     private fun createNotificationChannel(id: String) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -296,15 +300,16 @@ class ImageEditorActivity : AppCompatActivity() {
 
                 // Opening an outputstream with the Uri that we got
                 fos = imageUri?.let { resolver.openOutputStream(it) }
-                imagePath= imageUri.toString()
+                imagePath = imageUri.toString()
+                Log.d("check", " android > Q $imagePath")
             }
         } else {
             // These for devices running on android < Q
             val imagesDir =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             val image = File(imagesDir, filename)
-            imagePath=image.absolutePath
-            fos = FileOutputStream(image.absoluteFile)
+            imagePath = image.absolutePath
+            fos = FileOutputStream(image.absoluteFile, false)
         }
 
         fos?.use {

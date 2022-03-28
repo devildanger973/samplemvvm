@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
+                if (result.resultCode == RESULT_OK) {
                     // There are no request codes
                     val data: Intent? = result.data
                     val myIntent = Intent(this, ImageEditorActivity::class.java)
@@ -78,6 +78,20 @@ class MainActivity : AppCompatActivity() {
                     this.startActivity(myIntent)
                 }
             }
+        startFromNotification()
+    }
+
+    /**
+     *
+     */
+    private fun startFromNotification() {
+        val boolean = intent.getBooleanExtra("START_FROM_NOTI", false)
+        if (boolean == true) {
+            val myIntent = Intent(this, ImageEditorActivity::class.java)
+            val path = intent.getStringExtra("FILE_PATH")
+            myIntent.putExtra("FILE_PATH", path)
+            this.startActivity(myIntent)
+        }
     }
 
     /**
@@ -139,7 +153,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
 
     private fun listAllImage() {
