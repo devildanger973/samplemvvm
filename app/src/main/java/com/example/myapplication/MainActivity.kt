@@ -27,7 +27,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_ONE
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_TWO
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.messaging.FirebaseMessaging
 import java.io.File
 import java.io.FileOutputStream
 
@@ -79,6 +81,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         startFromNotification()
+    }
+
+    fun tokenListener() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            // Log.d(TAG, msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
     }
 
     /**

@@ -5,5 +5,6 @@
     <string name="save">save</string>
     <string name="channel_name">Save</string>
     <string name="channel_description">Save file</string>
+    <string name="msg_token_fmt">token</string>
 
 </resources>
