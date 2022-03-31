@@ -13,37 +13,49 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 
-class HeroAdapter(private val mContext: Context, private val listener:OnItemClickListener) :
-    RecyclerView.Adapter< RecyclerView.ViewHolder?>() {
+class HeroAdapter(private val mContext: Context, private val listener: OnItemClickListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
     companion object {
+        /**
+         *
+         */
         const val VIEW_TYPE_ONE = 1
+
+        /**
+         *
+         */
         const val VIEW_TYPE_TWO = 2
     }
+
     private var mHero = mutableListOf<Hero>()
+
     inner class ViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mImageHero: ImageView = itemView.findViewById(R.id.image_hero)
         val mTextName: TextView = itemView.findViewById(R.id.text_name)
-        fun bind(item:Hero){
-           mImageHero.setOnClickListener{
-               listener.onItemClick(item)
-           }
-       }
+        fun bind(item: Hero) {
+            mImageHero.setOnClickListener {
+                listener.onItemClick(item)
+            }
+        }
     }
+
     inner class ViewHolder2(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mImageHero: ImageView = itemView.findViewById(R.id.image_hero1)
         val mTextName: TextView = itemView.findViewById(R.id.text_name1)
         fun bind() {
-            mImageHero.setOnClickListener{
+            mImageHero.setOnClickListener {
                 listener.onOpenFolderClick()
             }
         }
     }
-     @SuppressLint("NotifyDataSetChanged")
-     fun setList(list: MutableList<Hero>){
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setList(list: MutableList<Hero>) {
         mHero.clear()
         mHero.addAll(list)
-         notifyDataSetChanged()
+        notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ONE) {
             val inflater = LayoutInflater.from(mContext)
@@ -54,37 +66,43 @@ class HeroAdapter(private val mContext: Context, private val listener:OnItemClic
         val heroView = inflater.inflate(R.layout.hero_item_open_photo, parent, false)
         return ViewHolder2(heroView)
     }
+
     override fun getItemViewType(position: Int): Int {
         return mHero[position].viewType
     }
-    override fun onBindViewHolder(holder:  RecyclerView.ViewHolder, position: Int) {
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val hero = mHero[position]
-        when(hero.viewType){
-            VIEW_TYPE_ONE ->{
-                if(hero.image !=-1)
+        when (hero.viewType) {
+            VIEW_TYPE_ONE -> {
+                if (hero.image != -1)
                     Glide.with(mContext).load(hero.image).into((holder as ViewHolder).mImageHero)
-                else{
-                    if (hero.imagePath !=null)
-                        Glide.with(mContext).load(hero.imagePath).into((holder as ViewHolder).mImageHero)
+                else {
+                    if (hero.imagePath != null)
+                        Glide.with(mContext).load(hero.imagePath)
+                            .into((holder as ViewHolder).mImageHero)
                 }
                 (holder as ViewHolder).mTextName.text = hero.name
                 holder.bind(item = hero)
             }
             VIEW_TYPE_TWO -> {
-                if(hero.image !=-1)
+                if (hero.image != -1)
                     Glide.with(mContext).load(hero.image).into((holder as ViewHolder2).mImageHero)
-                else{
-                    if (hero.imagePath !=null)
-                        Glide.with(mContext).load(hero.imagePath).into((holder as ViewHolder2).mImageHero)
+                else {
+                    if (hero.imagePath != null)
+                        Glide.with(mContext).load(hero.imagePath)
+                            .into((holder as ViewHolder2).mImageHero)
                 }
                 (holder as ViewHolder2).mTextName.text = hero.name
                 holder.bind()
             }
         }
     }
+
     override fun getItemCount(): Int {
         return mHero.size
     }
+
     interface OnItemClickListener {
         fun onItemClick(item: Hero?)
         fun onOpenFolderClick()
