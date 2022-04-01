@@ -25,6 +25,20 @@
         app:layout_constraintBottom_toBottomOf="@+id/activity_image"
 
         />
+
+    <com.warkiz.widget.IndicatorSeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="30"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerList"
+        app:layout_constraintEnd_toEndOf="@+id/activity_image"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_image"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        app:layout_constraintVertical_bias="0.867" />
+
     <ImageButton
         android:id="@+id/close"
         android:background="@drawable/circle_button"
@@ -73,77 +87,77 @@
         android:layout_marginBottom="8dp"
         />
 
-    <ImageButton
-        android:id="@+id/HD"
-        android:background="@drawable/circle_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:src="@android:drawable/ic_menu_view"
-        app:layout_constraintBottom_toTopOf="@id/recyclerList"
-        app:layout_constraintStart_toStartOf="@+id/activity_image"
-        app:layout_constraintEnd_toStartOf="@+id/HD1"
-        />
+<!--    <ImageButton-->
+<!--        android:id="@+id/HD"-->
+<!--        android:background="@drawable/circle_button"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:src="@android:drawable/ic_menu_view"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/activity_image"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/HD1"-->
+<!--        />-->
 
-    <ImageButton
-        android:id="@+id/HD1"
-        android:background="@drawable/circle_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="8dp"
-        android:src="@android:drawable/ic_menu_view"
-        app:layout_constraintBottom_toTopOf="@id/recyclerList"
-        app:layout_constraintStart_toEndOf="@id/HD"
-        app:layout_constraintEnd_toStartOf="@+id/HD2"
-
-
-        />
-
-    <ImageButton
-        android:id="@+id/HD2"
-        android:background="@drawable/circle_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="8dp"
-        android:src="@android:drawable/ic_menu_view"
-        app:layout_constraintBottom_toTopOf="@id/recyclerList"
-        app:layout_constraintStart_toEndOf="@id/HD1"
-        app:layout_constraintEnd_toStartOf="@+id/HD3"
+<!--    <ImageButton-->
+<!--        android:id="@+id/HD1"-->
+<!--        android:background="@drawable/circle_button"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:src="@android:drawable/ic_menu_view"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
+<!--        app:layout_constraintStart_toEndOf="@id/HD"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/HD2"-->
 
 
-        />
+<!--        />-->
 
-    <ImageButton
-        android:id="@+id/HD3"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/circle_button"
-        android:src="@android:drawable/ic_menu_view"
-        app:layout_constraintBottom_toTopOf="@id/recyclerList"
-        app:layout_constraintStart_toEndOf="@id/HD2"
-        app:layout_constraintEnd_toStartOf="@+id/HD4"
+<!--    <ImageButton-->
+<!--        android:id="@+id/HD2"-->
+<!--        android:background="@drawable/circle_button"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:src="@android:drawable/ic_menu_view"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
+<!--        app:layout_constraintStart_toEndOf="@id/HD1"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/HD3"-->
 
-        />
 
-    <ImageButton
-        android:id="@+id/HD4"
-        android:background="@drawable/circle_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:src="@android:drawable/ic_menu_view"
-        app:layout_constraintBottom_toTopOf="@id/recyclerList"
-        app:layout_constraintEnd_toEndOf="@id/activity_image"
-        app:layout_constraintStart_toEndOf="@id/HD3"
+<!--        />-->
 
-        />
+<!--    <ImageButton-->
+<!--        android:id="@+id/HD3"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginEnd="25dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:background="@drawable/circle_button"-->
+<!--        android:src="@android:drawable/ic_menu_view"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
+<!--        app:layout_constraintStart_toEndOf="@id/HD2"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/HD4"-->
+
+<!--        />-->
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/HD4"-->
+<!--        android:background="@drawable/circle_button"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:src="@android:drawable/ic_menu_view"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/activity_image"-->
+<!--        app:layout_constraintStart_toEndOf="@id/HD3"-->
+
+<!--        />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

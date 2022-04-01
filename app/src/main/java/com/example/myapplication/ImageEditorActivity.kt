@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -25,6 +26,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.warkiz.widget.IndicatorSeekBar
+import com.warkiz.widget.OnSeekChangeListener
+import com.warkiz.widget.SeekParams
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -114,6 +118,7 @@ class ImageEditorActivity : AppCompatActivity() {
         }
         mRecyclerList = findViewById(R.id.recyclerList)
         mHeros = mutableListOf()
+
         mHeroAdapter = HeroAdapter(this, object : HeroAdapter.OnItemClickListener {
             override fun onItemClick(item: Hero?) {
                 val uriItem: Uri = Uri.parse(item?.imagePath)
@@ -139,6 +144,28 @@ class ImageEditorActivity : AppCompatActivity() {
         listAllImage()
         mHeroAdapter.setList(mHeros)
         createNotificationChannel(id)
+        val indicatorSeekBar: IndicatorSeekBar = findViewById(R.id.seekBar)
+        indicatorSeekBar.setOnSeekChangeListener(object : OnSeekChangeListener {
+            override fun onSeeking(seekParams: SeekParams) {
+                val diff: Int = seekParams.progress - previousProcess
+                scaleImage(mPhotograp, diff)
+                previousProcess = seekParams.progress
+//                Log.i(TAG, seekParams.seekBar.toString())
+//                Log.i(TAG, seekParams.progress.toString())
+//                Log.i(TAG, seekParams.progressFloat.toString())
+//                Log.i(TAG, seekParams.fromUser.toString())
+//                //when tick count > 0
+//                Log.i(TAG, seekParams.thumbPosition.toString())
+//                Log.i(TAG, seekParams.tickText)
+            }
+
+            override fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: IndicatorSeekBar) {}
+        })
+
     }
 
     private fun setNotificationChannelIntent(id: String, imagePath: String) {
@@ -168,6 +195,26 @@ class ImageEditorActivity : AppCompatActivity() {
             // notificationId is a unique int for each notification that you must define
             notify(1, builder.build())
         }
+    }
+
+    private val WIDTH_SCALE_RATIO = 20
+    private val HEIGHT_SCALE_RATIO = 20
+    private var previousProcess = 0
+
+    /**
+     *
+     */
+    fun scaleImage(img: ImageView, scale: Int) {
+        var bitmap = (img.drawable as BitmapDrawable).bitmap
+        var width = bitmap.width.toFloat()
+        var height = bitmap.height.toFloat()
+        width += scale * WIDTH_SCALE_RATIO
+        height += scale * HEIGHT_SCALE_RATIO
+        bitmap = Bitmap.createScaledBitmap(
+            bitmap, width.toInt(), height.toInt(),
+            true
+        )
+        img.setImageBitmap(bitmap)
     }
 
     private fun createNotificationChannel(id: String) {
