@@ -68,16 +68,7 @@ class HeroEditorAdapter(private val mContext: Context, private val listener: OnI
          *
          */
         fun bind(item: Hero, position: Int) {
-            if (item.isSelected) {
-                mImageBorder.setBackgroundResource(R.drawable.on_item_select)
-                mBorderHeart.setBackgroundResource(R.drawable.border_heart_icon)
-                //notifyItemChanged(position)
-            } else {
-                mImageBorder.visibility = View.GONE
-                mImageHeart.visibility = View.GONE
-                mBorderHeart.visibility = View.GONE
 
-            }
             mImageHero.setOnClickListener {
                 listener.onItemClick(item)
                 if (currentPos != -1) {
@@ -86,21 +77,43 @@ class HeroEditorAdapter(private val mContext: Context, private val listener: OnI
                         notifyItemChanged(position)
                         mHero[currentPos].isSelected = false
                         notifyItemChanged(currentPos)
-                        currentPos = position
-                        Log.d("DDDDD", "1 position = $position currentPos = $currentPos ")
+                        Log.d("DDDDD", "1 position = $position currentPos = $currentPos")
+                        Log.d(
+                            "DDDDD",
+                            " mHero[$position].isSelected =${mHero[position].isSelected}"
+                        )
+                        Log.d(
+                            "DDDDD",
+                            " mHero[$currentPos].isSelected =${mHero[currentPos].isSelected}"
+                        )
+
                     } else {
                         mImageHeart.setBackgroundResource(R.drawable.vector_heart_icon)
                         mBorderHeart.visibility = View.GONE
-                        currentPos = position
                         Log.d("DDDDD", "2  position = $position currentPos = $currentPos")
                     }
                 } else {
                     item.isSelected = true
                     notifyItemChanged(position)
-                    currentPos = position
                     Log.d("DDDDD", "3 position = $position currentPos = $currentPos")
                 }
                 Log.d("DDDDD", "================================")
+                currentPos = position
+
+            }
+            if (item.isSelected) {
+                Log.d("DDDDD", "binding item.isSelected "+item.isSelected)
+                mImageBorder.visibility = View.VISIBLE
+                mImageHeart.visibility = View.VISIBLE
+                mBorderHeart.visibility = View.VISIBLE
+                mImageBorder.setBackgroundResource(R.drawable.on_item_select)
+                mBorderHeart.setBackgroundResource(R.drawable.border_heart_icon)
+
+            } else {
+                mImageBorder.visibility = View.GONE
+                mImageHeart.visibility = View.GONE
+                mBorderHeart.visibility = View.GONE
+
             }
         }
     }

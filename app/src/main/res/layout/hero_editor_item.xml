@@ -50,13 +50,13 @@
     <ImageView
         android:id="@+id/image_border_heart"
         android:layout_width="17dp"
-        android:layout_height="22dp"
+        android:layout_height="17dp"
         app:layout_constraintEnd_toEndOf="@id/image_hero_heart"
         app:layout_constraintTop_toTopOf="@id/image_hero_heart"
         app:layout_constraintStart_toStartOf="@id/image_hero_heart"
         app:layout_constraintBottom_toBottomOf="@id/image_hero_heart"
-
-        tools:src="@drawable/border_heart_icon" />
+        tools:src="@drawable/border_heart_icon"
+        />
     <TextView
         android:id="@+id/text_name_editor"
         android:layout_width="wrap_content"
