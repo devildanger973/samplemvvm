@@ -1,28 +1,22 @@
 package com.example.myapplication
 
 import android.Manifest
-import android.app.Activity
-import android.app.PendingIntent
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.ComposePathEffect
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_ONE
@@ -46,24 +40,66 @@ class MainActivity : AppCompatActivity() {
     /**
      *
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mRecyclerHero = findViewById(R.id.recyclerHero)
-        mHeros = mutableListOf<Hero>()
+        mHeros = mutableListOf()
         val gridLayoutManager = GridLayoutManager(applicationContext, 3)
+        val checkBoxAll: ImageView = findViewById(R.id.checkAll)
+
+        var check = 1
+
+        val count1: Int = 0
+        val topAppBar: Toolbar = findViewById(R.id.image)
         mHeroAdapter = HeroAdapter(this, object : HeroAdapter.OnItemClickListener {
             override fun onItemClick(item: Hero?) {
                 item?.imagePath?.let { startImageEditor(imagePath = it) }
+
             }
 
             override fun onOpenFolderClick() {
                 startGalleryForResult()
             }
+
+            override fun onCheck(count: Int) {
+                topAppBar.title = "Selected: ${count1 + count}"
+            }
+
         })
+
+        topAppBar.setNavigationOnClickListener {
+            // Handle navigation icon press
+            topAppBar.title = ""
+            topAppBar.navigationIcon =
+                getDrawable(R.drawable.ic_settings_3110)
+            mHeroAdapter.setShowCheckBox(false)
+        }
+
+        checkBoxAll.setOnClickListener {
+
+            topAppBar.title = ""
+            if (check == 1) {
+
+                topAppBar.title = "Selected: 0"
+                mHeroAdapter.setShowCheckBox(true)
+                Log.d("checkDDDD", "${true}")
+                topAppBar.navigationIcon =
+                    getDrawable(androidx.navigation.ui.R.drawable.ic_mtrl_chip_close_circle)
+                check = 2
+            } else {
+                topAppBar.navigationIcon =
+                    getDrawable(R.drawable.ic_settings_3110)
+                mHeroAdapter.setShowCheckBox(false)
+                Log.d("checkDDDD", "${false}")
+                check = 1
+            }
+        }
         mRecyclerHero.adapter = mHeroAdapter
         //mRecyclerHero.layoutManager=LinearLayoutManager(this)
         mRecyclerHero.layoutManager = gridLayoutManager
+
         askPermission()
         val mFloatingActionButton: FloatingActionButton = findViewById(R.id.camera)
         mFloatingActionButton.setOnClickListener() {
@@ -105,7 +141,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun startFromNotification() {
         val boolean = intent.getBooleanExtra("START_FROM_NOTI", false)
-        if (boolean == true) {
+        if (boolean) {
             val myIntent = Intent(this, ImageEditorActivity::class.java)
             val path = intent.getStringExtra("FILE_PATH")
             myIntent.putExtra("FILE_PATH", path)
@@ -137,7 +173,9 @@ class MainActivity : AppCompatActivity() {
                 this,
                 arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+
                 ),
                 1
             )
@@ -195,9 +233,11 @@ class MainActivity : AppCompatActivity() {
             val dataColumnIndex: Int = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
             //Store the path of the image
             arrPath[i] = cursor?.getString(dataColumnIndex)
+            var a = 1
+
             mHeros.add(
                 Hero(
-                    name = "image $i",
+                    name = "image ${a + i}",
                     imagePath = cursor?.getString(dataColumnIndex).orEmpty(),
                     viewType = VIEW_TYPE_ONE
                 )
@@ -206,14 +246,6 @@ class MainActivity : AppCompatActivity() {
         }
 // The cursor should be freed up after use with close()
         cursor?.close()
-    }
-
-    private fun creatHeroList() {
-        //mHeros.add(Hero("thor", R.drawable.thor,))
-        //mHeros.add(Hero("ironmen", R.drawable.dafodil))
-        //mHeros.add(Hero("hulk", R.drawable.hulk))
-        //mHeros.add(Hero("spidermen", R.drawable.spiderman))
-        //mHeros.add(Hero("sad", com.google.android.material.R.drawable.notification_template_icon_low_bg))
     }
 
     private val takePicture =

@@ -2,9 +2,11 @@ package com.example.myapplication
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 
 import android.widget.TextView
@@ -13,42 +15,122 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 
+/**
+ *
+ */
 class HeroAdapter(private val mContext: Context, private val listener: OnItemClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
+    /**
+     *
+     */
+    var isShowCheck: Boolean = false
+
     companion object {
-        /**
-         *
-         */
-        const val VIEW_TYPE_ONE = 1
 
         /**
          *
          */
-        const val VIEW_TYPE_TWO = 2
+        const val VIEW_TYPE_ONE: Int = 1
+
+        /**
+         *
+         */
+        const val VIEW_TYPE_TWO: Int = 2
     }
+
+    /**
+     *
+     */
+    var count: Int = 0
 
     private var mHero = mutableListOf<Hero>()
 
+    /**
+     *
+     */
     inner class ViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
+        /**
+         *
+         */
         val mImageHero: ImageView = itemView.findViewById(R.id.image_hero)
+
+        /**
+         *
+         */
         val mTextName: TextView = itemView.findViewById(R.id.text_name)
-        fun bind(item: Hero) {
-            mImageHero.setOnClickListener {
-                listener.onItemClick(item)
+
+        /**
+         *
+         */
+        val checkBox: CheckBox = itemView.findViewById(R.id.checkbox)
+
+        /**
+         *
+         */
+        val parent1: ViewGroup = itemView.findViewById(R.id.parent1)
+
+        /**
+         *
+         */
+        fun bind(item: Hero, position: Int) {
+            if (isShowCheck) {
+                checkBox.visibility = View.VISIBLE
+                mImageHero.isClickable = false
+                mImageHero.isFocusable = false
+                parent1.setOnClickListener {
+
+                    checkBox.isChecked = !checkBox.isChecked
+                    if (checkBox.isChecked) {
+                        count++
+                        listener.onCheck(count)
+                    } else {
+                        count--
+                        listener.onCheck(count)
+                    }
+                    Log.d("AAAAA", "$count")
+                }
+            } else {
+                count = 0
+//                listener.onCheck(count)
+                checkBox.visibility = View.GONE
+                parent1.setOnClickListener(null)
+                mImageHero.setOnClickListener {
+                    listener.onItemClick(item)
+                }
             }
+            Log.d("SSSSS", "$position = ${mHero[position]}  va isCheck " + isShowCheck)
+            Log.d("SSSSS", "===============================================")
+
         }
     }
 
+    /**
+     *
+     */
     inner class ViewHolder2(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val mImageHero: ImageView = itemView.findViewById(R.id.image_hero1)
+        /**
+         *
+         */
+        val mImageHero1: ImageView = itemView.findViewById(R.id.image_hero1)
+
+        /**
+         *
+         */
         val mTextName: TextView = itemView.findViewById(R.id.text_name1)
+
+        /**
+         *
+         */
         fun bind() {
-            mImageHero.setOnClickListener {
+            mImageHero1.setOnClickListener {
                 listener.onOpenFolderClick()
             }
         }
     }
 
+    /**
+     *
+     */
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: MutableList<Hero>) {
         mHero.clear()
@@ -56,6 +138,17 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
         notifyDataSetChanged()
     }
 
+    /**
+     *
+     */
+    fun setShowCheckBox(isCheck: Boolean) {
+        isShowCheck = isCheck
+        notifyDataSetChanged()
+    }
+
+    /**
+     *
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ONE) {
             val inflater = LayoutInflater.from(mContext)
@@ -67,10 +160,16 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
         return ViewHolder2(heroView)
     }
 
+    /**
+     *
+     */
     override fun getItemViewType(position: Int): Int {
         return mHero[position].viewType
     }
 
+    /**
+     *
+     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val hero = mHero[position]
         when (hero.viewType) {
@@ -83,15 +182,15 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
                             .into((holder as ViewHolder).mImageHero)
                 }
                 (holder as ViewHolder).mTextName.text = hero.name
-                holder.bind(item = hero)
+                holder.bind(item = hero, position)
             }
             VIEW_TYPE_TWO -> {
                 if (hero.image != -1)
-                    Glide.with(mContext).load(hero.image).into((holder as ViewHolder2).mImageHero)
+                    Glide.with(mContext).load(hero.image).into((holder as ViewHolder2).mImageHero1)
                 else {
                     if (hero.imagePath != null)
                         Glide.with(mContext).load(hero.imagePath)
-                            .into((holder as ViewHolder2).mImageHero)
+                            .into((holder as ViewHolder2).mImageHero1)
                 }
                 (holder as ViewHolder2).mTextName.text = hero.name
                 holder.bind()
@@ -99,13 +198,31 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
         }
     }
 
+    /**
+     *
+     */
     override fun getItemCount(): Int {
         return mHero.size
     }
 
+    /**
+     *
+     */
     interface OnItemClickListener {
+        /**
+         *
+         */
         fun onItemClick(item: Hero?)
+
+        /**
+         *
+         */
         fun onOpenFolderClick()
+
+        /**
+         *
+         */
+        fun onCheck(count: Int)
     }
 
 }
