@@ -40,6 +40,12 @@
         <activity
             android:name=".ImageEditorActivity"
             android:exported="true"
+            android:launchMode="singleTask"
+            >
+        </activity>
+        <activity
+            android:name=".AddItemActivity"
+            android:exported="true"
             >
         </activity>
 

@@ -101,7 +101,6 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
                 }
             } else {
                 count = 0
-//                listener.onCheck(count)
                 checkBox.visibility = View.GONE
                 parent1.setOnClickListener(null)
                 mImageHero.setOnClickListener {
@@ -110,7 +109,7 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
             }
             Log.d("SSSSS", "$position = ${mHero[position]}  va isCheck " + isShowCheck)
             Log.d("SSSSS", "===============================================")
-
+            mHeroSelected.clear()
         }
     }
 

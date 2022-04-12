@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -34,11 +36,13 @@ import java.io.FileOutputStream
 class MainActivity : AppCompatActivity() {
     private lateinit var mHeros: MutableList<Hero>
     private lateinit var mHeroSelected: MutableList<HeroSelected>
-
     private lateinit var mRecyclerHero: RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    /**
+     *
+     */
     var arr = mutableListOf<String>()
 
     /**
@@ -84,10 +88,11 @@ class MainActivity : AppCompatActivity() {
             topAppBar.navigationIcon =
                 getDrawable(R.drawable.ic_settings_3110)
             mHeroAdapter.setShowCheckBox(false)
+            arr.clear()
+            check = 1
         }
 
         checkBoxAll.setOnClickListener {
-
             topAppBar.title = ""
             if (check == 1) {
                 topAppBar.title = "Selected: 0"
@@ -98,7 +103,6 @@ class MainActivity : AppCompatActivity() {
                 check = 2
             } else {
                 startImageList(arr)
-
                 topAppBar.navigationIcon =
                     getDrawable(R.drawable.ic_settings_3110)
                 mHeroAdapter.setShowCheckBox(false)

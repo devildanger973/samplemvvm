@@ -46,6 +46,11 @@ class ImageEditorActivity : AppCompatActivity() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val id: String = "my_channel_01"
     private var isMultiple: Boolean = false
+    private lateinit var listHeroSelected: MutableList<HeroSelected>
+
+    /**
+     *
+     */
 
     /**
      *
@@ -55,36 +60,46 @@ class ImageEditorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_image)
         val filePath = intent.getStringExtra("FILE_PATH")
         Log.d("QQQQQ", "oncreate android > Q $filePath")
+        listHeroSelected = mutableListOf()
+        val mPhotograph: ImageView = findViewById(R.id.image_view)
 
-        val mPhotograp: ImageView = findViewById(R.id.image_view)
         val list = intent.getStringArrayListExtra("LIST")
-        val listHeroSelected = mutableListOf<HeroSelected>()
+
         if (filePath != null) {
             val uri: Uri = Uri.parse(filePath)
-            mPhotograp.setImageURI(uri)
+            mPhotograph.setImageURI(uri)
             isMultiple = false
 
         } else if (list != null) {
             isMultiple = true
             for (item in list) {
                 listHeroSelected.add(HeroSelected(imagePath = item, viewType = 1))
-
             }
-            val fileList = listHeroSelected.first().imagePath
-            val uri: Uri = Uri.parse(fileList)
-            mPhotograp.setImageURI(uri)
-            Log.d("QQQQQ", "$fileList")
+            if (listHeroSelected.size != 0) {
+                val fileList = listHeroSelected.first().imagePath
+                val uri: Uri = Uri.parse(fileList)
+                mPhotograph.setImageURI(uri)
+                listHeroSelected.add(
+                    HeroSelected(
+                        "",
+                        viewType = ItemSelectedAdapter.VIEW_TYPE_TWO2
+                    )
+                )
+                Log.d("QQQQQ", "$fileList")
+            } else {
+                finish()
+            }
         }
-
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
         mItemSelectedAdapter =
             ItemSelectedAdapter(this, object : ItemSelectedAdapter.OnItemClickListener {
                 override fun onItemClick(item: HeroSelected) {
                     val uriItem: Uri = Uri.parse(item.imagePath)
-                    mPhotograp.setImageURI(uriItem)
+                    mPhotograph.setImageURI(uriItem)
                 }
 
                 override fun onOpenFolderClick() {
+                    startAddItem()
                 }
 
             })
@@ -105,7 +120,7 @@ class ImageEditorActivity : AppCompatActivity() {
         }
         val save: Button = findViewById(R.id.save)
         val close: ImageButton = findViewById(R.id.close)
-        close.setOnClickListener() {
+        close.setOnClickListener {
             finish()
             listHeroSelected.clear()
         }
@@ -113,17 +128,17 @@ class ImageEditorActivity : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
         progressBar.visibility = View.GONE
-        share.setOnClickListener() {
+        share.setOnClickListener {
             progressBar.visibility = View.VISIBLE
-            var i = progressBar.progress
+            var s = progressBar.progress
             Thread(Runnable {
                 // this loop will run until the value of i becomes 99
-                while (i < 100) {
-                    i += 1
+                while (s < 100) {
+                    s += 1
                     // Update the progress bar and display the current value
                     val handler: Handler = Handler()
                     handler.post(Runnable {
-                        progressBar.progress = i
+                        progressBar.progress = s
                     })
                     try {
                         Thread.sleep(100)
@@ -131,7 +146,7 @@ class ImageEditorActivity : AppCompatActivity() {
                         e.printStackTrace()
                     }
                 }
-                val bmpUri = getLocalBitmapUri(mPhotograp)
+                val bmpUri = getLocalBitmapUri(mPhotograph)
                 if (bmpUri != null) {
                     // Construct a ShareIntent with link to image
                     val shareIntent = Intent()
@@ -150,11 +165,11 @@ class ImageEditorActivity : AppCompatActivity() {
                 progressBar.visibility = View.INVISIBLE
             }).start()
         }
-        save.setOnClickListener() {
+        save.setOnClickListener {
             // get the bitmap of the view using
             // getScreenShotFromView method it is
             // implemented below
-            val bitmap = getScreenShotFromView(mPhotograp)
+            val bitmap = getScreenShotFromView(mPhotograph)
             // if bitmap is not null then
             // save it to gallery
             var path = ""
@@ -173,7 +188,7 @@ class ImageEditorActivity : AppCompatActivity() {
             HeroEditorAdapter(this, object : HeroEditorAdapter.OnItemClickListener {
                 override fun onItemClick(item: Hero?) {
                     val uriItem: Uri = Uri.parse(item?.imagePath)
-                    mPhotograp.setImageURI(uriItem)
+                    mPhotograph.setImageURI(uriItem)
 
                 }
 
@@ -191,7 +206,7 @@ class ImageEditorActivity : AppCompatActivity() {
                     // There are no request codes
                     val data: Intent? = result.data
                     val uriGallery: Uri = Uri.parse(data?.data.toString())
-                    mPhotograp.setImageURI(uriGallery)
+                    mPhotograph.setImageURI(uriGallery)
                 }
             }
         listAllImage()
@@ -201,7 +216,7 @@ class ImageEditorActivity : AppCompatActivity() {
         indicatorSeekBar.setOnSeekChangeListener(object : OnSeekChangeListener {
             override fun onSeeking(seekParams: SeekParams) {
                 val diff: Int = seekParams.progress - previousProcess
-                scaleImage(mPhotograp, diff)
+                scaleImage(mPhotograph, diff)
                 previousProcess = seekParams.progress
 //                Log.i(TAG, seekParams.seekBar.toString())
 //                Log.i(TAG, seekParams.progress.toString())
@@ -221,10 +236,42 @@ class ImageEditorActivity : AppCompatActivity() {
 
     }
 
-    private fun ImageSelected(imagePath: String) {
-        val myIntent = Intent(this, ImageEditorActivity::class.java)
-        myIntent.putExtra("LIST_FILE", imagePath)
+    override fun onDestroy() {
+        super.onDestroy()
+        listHeroSelected.clear()
     }
+
+    /**
+     *
+     */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val list1 = intent?.getStringArrayListExtra("LIST_ITEM")
+        var insertPos = listHeroSelected.size -2
+        if (list1 != null) {
+            for (item1 in list1) {
+
+                listHeroSelected.add(insertPos++, HeroSelected(imagePath = item1, viewType = 1))
+
+            }
+            mItemSelectedAdapter.setList(listHeroSelected)
+        }
+
+    }
+
+    /**
+     *
+     */
+    private fun addItem() {
+
+    }
+
+    private fun startAddItem() {
+        val myIntent = Intent(this, AddItemActivity::class.java)
+        myIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        this.startActivity(myIntent)
+    }
+
 
     private fun setNotificationChannelIntent(id: String, imagePath: String) {
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -330,7 +377,7 @@ class ImageEditorActivity : AppCompatActivity() {
     /**
      *
      */
-    public class Handler {
+    class Handler {
         /**
          *
          */
@@ -426,17 +473,17 @@ class ImageEditorActivity : AppCompatActivity() {
     }
 
     private fun startMarsPhoto() {
-        val myIntent: Intent = Intent(this, MarsPhotoActivity::class.java)
+        val myIntent = Intent(this, MarsPhotoActivity::class.java)
         this.startActivity(myIntent)
     }
 
     /**
      *
      */
-    fun startGalleryForResult() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        resultLauncher.launch(intent)
-    }
+//    fun startGalleryForResult() {
+//        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+//        resultLauncher.launch(intent)
+//    }
 
     private fun listAllImage() {
         mHeros.add(Hero("", viewType = HeroAdapter.VIEW_TYPE_TWO))
@@ -465,7 +512,6 @@ class ImageEditorActivity : AppCompatActivity() {
                     name = "image ${a + i}",
                     imagePath = cursor?.getString(dataColumnIndex).orEmpty(),
                     viewType = HeroAdapter.VIEW_TYPE_ONE
-
                 )
             )
             Log.i("PATH", arrPath[i].orEmpty())
