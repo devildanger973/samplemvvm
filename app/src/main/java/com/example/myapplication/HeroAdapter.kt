@@ -44,6 +44,8 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
     var count: Int = 0
 
     private var mHero = mutableListOf<Hero>()
+    private var mHeroSelected = mutableListOf<String>()
+
 
     /**
      *
@@ -82,12 +84,20 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
                     checkBox.isChecked = !checkBox.isChecked
                     if (checkBox.isChecked) {
                         count++
+                        mHeroSelected.add(mHero[position].imagePath.orEmpty())
                         listener.onCheck(count)
+                        listener.onSelected(mHeroSelected)
+
                     } else {
                         count--
                         listener.onCheck(count)
+                        mHeroSelected.remove(mHero[position].imagePath.orEmpty())
+                        listener.onSelected(mHeroSelected)
+
                     }
-                    Log.d("AAAAA", "$count")
+
+
+                    Log.d("AAAAA", "$count $mHeroSelected")
                 }
             } else {
                 count = 0
@@ -223,6 +233,11 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
          *
          */
         fun onCheck(count: Int)
+
+        /**
+         *
+         */
+        fun onSelected(array: List<String>)
     }
 
 }

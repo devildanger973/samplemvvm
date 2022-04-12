@@ -33,9 +33,13 @@ import java.io.FileOutputStream
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var mHeros: MutableList<Hero>
+    private lateinit var mHeroSelected: MutableList<HeroSelected>
+
     private lateinit var mRecyclerHero: RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    var arr = mutableListOf<String>()
 
     /**
      *
@@ -46,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mRecyclerHero = findViewById(R.id.recyclerHero)
         mHeros = mutableListOf()
+        mHeroSelected = mutableListOf()
         val gridLayoutManager = GridLayoutManager(applicationContext, 3)
         val checkBoxAll: ImageView = findViewById(R.id.checkAll)
 
@@ -56,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         mHeroAdapter = HeroAdapter(this, object : HeroAdapter.OnItemClickListener {
             override fun onItemClick(item: Hero?) {
                 item?.imagePath?.let { startImageEditor(imagePath = it) }
-
             }
 
             override fun onOpenFolderClick() {
@@ -65,6 +69,11 @@ class MainActivity : AppCompatActivity() {
 
             override fun onCheck(count: Int) {
                 topAppBar.title = "Selected: ${count1 + count}"
+            }
+
+            override fun onSelected(array: List<String>) {
+                arr = array.toMutableList()
+
             }
 
         })
@@ -81,7 +90,6 @@ class MainActivity : AppCompatActivity() {
 
             topAppBar.title = ""
             if (check == 1) {
-
                 topAppBar.title = "Selected: 0"
                 mHeroAdapter.setShowCheckBox(true)
                 Log.d("checkDDDD", "${true}")
@@ -89,6 +97,8 @@ class MainActivity : AppCompatActivity() {
                     getDrawable(androidx.navigation.ui.R.drawable.ic_mtrl_chip_close_circle)
                 check = 2
             } else {
+                startImageList(arr)
+
                 topAppBar.navigationIcon =
                     getDrawable(R.drawable.ic_settings_3110)
                 mHeroAdapter.setShowCheckBox(false)
@@ -160,6 +170,13 @@ class MainActivity : AppCompatActivity() {
     private fun startImageEditor(imagePath: String) {
         val myIntent = Intent(this, ImageEditorActivity::class.java)
         myIntent.putExtra("FILE_PATH", imagePath)
+        this.startActivity(myIntent)
+    }
+
+
+    private fun startImageList(imagePath: List<String>) {
+        val myIntent = Intent(this, ImageEditorActivity::class.java)
+        myIntent.putStringArrayListExtra("LIST", imagePath as ArrayList<String?>?)
         this.startActivity(myIntent)
     }
 

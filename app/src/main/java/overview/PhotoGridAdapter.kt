@@ -74,11 +74,13 @@ class PhotoGridAdapter(
        /* Glide.with(mContext)
             .load(marsPhoto.imgSrcUrl)
             .into(holder.mImagePhoto)*/
-        val url =marsPhoto.imgSrcUrl.replace("http","https")
+        val url = marsPhoto.imgSrcUrl.replace("http","https")
         //holder.mImagePhoto.setImageURI(Uri.parse(url))
         Glide.with(mContext)
             .load(url)
+            .placeholder(R.drawable.ic_launcher_background)
             .into(holder.mImagePhoto)
+
         Log.d("clickimage","image ${url}");
     }
 

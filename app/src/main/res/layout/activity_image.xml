@@ -7,12 +7,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     >
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerListSelected"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/image1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
 
+        android:layout_marginBottom="8dp"
+        />
+    <Toolbar
+        android:id="@+id/image1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </Toolbar>
+    <Button
+        android:id="@+id/hideListSelected"
+        android:layout_width="72dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+
+        android:background="@drawable/roundsquare_button"
+        android:text="Hide"
+        app:layout_constraintStart_toEndOf="@id/close"
+        app:layout_constraintTop_toTopOf="@id/image1"
+        tools:ignore="MissingConstraints" />
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -45,8 +77,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="16dp"
-        app:layout_constraintStart_toStartOf="@id/activity_image"
-        app:layout_constraintTop_toTopOf="@+id/activity_image"
+        app:layout_constraintStart_toStartOf="@id/image1"
+        app:layout_constraintTop_toTopOf="@+id/image1"
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         tools:ignore="MissingConstraints" />
 
@@ -60,7 +92,7 @@
         android:layout_marginEnd="8dp"
         android:src="@android:drawable/ic_menu_share"
         app:layout_constraintEnd_toStartOf="@+id/save"
-        app:layout_constraintTop_toTopOf="@+id/activity_image"
+        app:layout_constraintTop_toTopOf="@+id/image1"
         tools:ignore="MissingConstraints"
 
         />
@@ -73,8 +105,8 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/roundsquare_button"
         android:text="@string/save"
-        app:layout_constraintEnd_toEndOf="@id/activity_image"
-        app:layout_constraintTop_toTopOf="@id/activity_image"
+        app:layout_constraintEnd_toEndOf="@id/image1"
+        app:layout_constraintTop_toTopOf="@id/image1"
         tools:ignore="MissingConstraints" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerList"
