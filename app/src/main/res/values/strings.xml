@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Edit Photo</string>
     <string name="floating">floating</string>
     <string name="open_photos">Open photos</string>
     <string name="save">save</string>
@@ -9,6 +9,11 @@
     <string name="page_title">Selected</string>
     <string name="favorite">token</string>
     <string name="content_description_favorite">token</string>
+    <!--    Room - Database-->
+    <string name="add_word">Add</string>
+    <string name="hint_word">Word...</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Word not saved because it is empty.</string>
 
 
 </resources>

@@ -2,11 +2,10 @@ package com.example.myapplication
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -17,6 +16,7 @@ import android.util.Log
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,6 +26,7 @@ import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_TWO
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.messaging.FirebaseMessaging
+import data.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -35,9 +36,12 @@ import java.io.FileOutputStream
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var mHeros: MutableList<Hero>
+    private lateinit var mImageData: MutableList<ImageData>
     private lateinit var mHeroSelected: MutableList<HeroSelected>
     private lateinit var mRecyclerHero: RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
+    private lateinit var mImageListAdapter: ImageListAdapter
+
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     /**
@@ -48,6 +52,13 @@ class MainActivity : AppCompatActivity() {
     /**
      *
      */
+
+    //Room - Database
+    private val newWordActivityRequestCode = 1
+    private val imageViewModel: ImageViewModel by viewModels {
+        ImageViewModelFactory((application as ImageApplication).repository)
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         mRecyclerHero = findViewById(R.id.recyclerHero)
         mHeros = mutableListOf()
         mHeroSelected = mutableListOf()
+        mImageData = mutableListOf()
         val gridLayoutManager = GridLayoutManager(applicationContext, 3)
         val checkBoxAll: ImageView = findViewById(R.id.checkAll)
 
@@ -102,12 +114,22 @@ class MainActivity : AppCompatActivity() {
                     getDrawable(androidx.navigation.ui.R.drawable.ic_mtrl_chip_close_circle)
                 check = 2
             } else {
-                startImageList(arr)
-                topAppBar.navigationIcon =
-                    getDrawable(R.drawable.ic_settings_3110)
-                mHeroAdapter.setShowCheckBox(false)
-                Log.d("checkDDDD", "${false}")
-                check = 1
+                if (arr.size == 0) {
+                    topAppBar.navigationIcon =
+                        getDrawable(R.drawable.ic_settings_3110)
+                    mHeroAdapter.setShowCheckBox(false)
+                    Log.d("checkDDDD", "${false}")
+                    check = 1
+                    arr.clear()
+
+                } else {
+                    startImageList(arr)
+                    mHeroAdapter.setShowCheckBox(false)
+                    topAppBar.navigationIcon =
+                        getDrawable(R.drawable.ic_settings_3110)
+                    check = 1
+                    arr.clear()
+                }
             }
         }
         mRecyclerHero.adapter = mHeroAdapter
@@ -131,7 +153,49 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         startFromNotification()
+
+
+        //Room - Database
+        mImageData = mutableListOf()
+        val btGallery: Button = findViewById(R.id.gallery)
+        val btEdited: Button = findViewById(R.id.edited)
+        mImageListAdapter = ImageListAdapter(this, object : ImageListAdapter.OnItemClickListener {
+            override fun onItemClick(item: ImageData) {
+                item?.imagePath1?.let { startImageEditor(imagePath = it) }
+            }
+        })
+        btEdited.setOnClickListener {
+            imageViewModel.allImage.observe(this) { image ->
+                // Update the cached copy of the words in the adapter.
+                image.let { mImageListAdapter.setList(it as MutableList<ImageData>) }
+            }
+            mRecyclerHero.adapter = mImageListAdapter
+        }
+        btGallery.setOnClickListener {
+            mRecyclerHero.adapter = mHeroAdapter
+
+        }
+
     }
+
+    //Room - Database
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intentData)
+        if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
+
+            intentData?.getStringExtra("EXTRA_REPLY")?.let { reply ->
+                val image = ImageData(reply)
+                imageViewModel.insert(image)
+            }
+        } else {
+            Toast.makeText(
+                applicationContext,
+                R.string.empty_not_saved,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 
     fun tokenListener() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
@@ -172,9 +236,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startImageEditor(imagePath: String) {
-        val myIntent = Intent(this, ImageEditorActivity::class.java)
+        val myIntent = Intent(this@MainActivity, ImageEditorActivity::class.java)
         myIntent.putExtra("FILE_PATH", imagePath)
-        this.startActivity(myIntent)
+        startActivityForResult(myIntent, newWordActivityRequestCode)
+
     }
 
 
@@ -274,12 +339,12 @@ class MainActivity : AppCompatActivity() {
             saveFile(bitmap)
         }
 
-    private fun saveFile(bitmap: Bitmap) {
+    private fun saveFile(bitmap: Bitmap?) {
         val contextWrapper = ContextWrapper(applicationContext)
         val directory = contextWrapper.getDir(filesDir.name, Context.MODE_PRIVATE)
         val file = File(directory, "fileName")
         val fos = FileOutputStream(file.absolutePath, false) // save
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+        (bitmap ?: return).compress(Bitmap.CompressFormat.JPEG, 100, fos)
         Log.d("filepath", "filepath ${file.absolutePath} length ${file.length()}")
         fos.close()
         val myIntent = Intent(this, ImageEditorActivity::class.java)

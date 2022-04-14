@@ -87,7 +87,7 @@ class ImageEditorActivity : AppCompatActivity() {
                 )
                 Log.d("QQQQQ", "$fileList")
             } else {
-                finish()
+               
             }
         }
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
@@ -119,6 +119,25 @@ class ImageEditorActivity : AppCompatActivity() {
             }
         }
         val save: Button = findViewById(R.id.save)
+        save.setOnClickListener {
+            val replyIntent = Intent(this, MainActivity::class.java)
+            // get the bitmap of the view using
+            // getScreenShotFromView method it is
+            // implemented below
+            val bitmap = getScreenShotFromView(mPhotograph)
+            // if bitmap is not null then
+            // save it to gallery
+            var path = ""
+            if (bitmap != null) {
+                path = saveMediaToStorage(bitmap)
+                replyIntent.putExtra("EXTRA_REPLY", path)
+                setResult(Activity.RESULT_OK, replyIntent)
+                Log.d("55555", path)
+            }
+           // setNotificationChannelIntent(id, imagePath = path)
+            finish()
+        }
+
         val close: ImageButton = findViewById(R.id.close)
         close.setOnClickListener {
             finish()
@@ -164,20 +183,6 @@ class ImageEditorActivity : AppCompatActivity() {
                 // View.GONE will remove the progressbar
                 progressBar.visibility = View.INVISIBLE
             }).start()
-        }
-        save.setOnClickListener {
-            // get the bitmap of the view using
-            // getScreenShotFromView method it is
-            // implemented below
-            val bitmap = getScreenShotFromView(mPhotograph)
-            // if bitmap is not null then
-            // save it to gallery
-            var path = ""
-            if (bitmap != null) {
-                path = saveMediaToStorage(bitmap)
-            }
-            setNotificationChannelIntent(id, imagePath = path)
-            finish()
         }
 
 
@@ -278,7 +283,7 @@ class ImageEditorActivity : AppCompatActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("FILE_PATH", imagePath)
             putExtra("START_FROM_NOTI", true)
-            Log.d("check", " android > Q $imagePath")
+            Log.d("check22222", " android > Q $imagePath")
 
         }
         val pendingIntent: PendingIntent =
@@ -453,7 +458,7 @@ class ImageEditorActivity : AppCompatActivity() {
                 // Opening an outputstream with the Uri that we got
                 fos = imageUri?.let { resolver.openOutputStream(it) }
                 imagePath = imageUri.toString()
-                Log.d("check", " android > Q $imagePath")
+                Log.d("check22222", " android > Q $imagePath")
             }
         } else {
             // These for devices running on android < Q
