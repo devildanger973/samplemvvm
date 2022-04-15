@@ -89,16 +89,25 @@ class AddItemActivity : AppCompatActivity() {
         mRecyclerHero.layoutManager = gridLayoutManager
         listAllImage()
         mHeroAdapter.setList(mHeros)
-        for (item in mHeroSelected) {
-            for (item1 in mHeros) {
-                if (item.imagePath != item1.imagePath) {
-                    //mHeroSelected.add(HeroSelected(imagePath = item, viewType = 1))
 
-                }
-            }
-        }
+        comparison()
     }
 
+    private fun comparison() {
+        val list = intent.getStringArrayListExtra("LIST_SELECTED")
+        if (list != null) {
+
+            for (item in list) {
+                for (item1 in mHeros) {
+                    if (item == item1.imagePath) {
+                        item1.isSelected = true
+                    }
+                }
+            }
+            mHeroAdapter.setList(mHeros)
+        }
+        Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
+    }
 
     private fun startImageList(imagePath: List<String>) {
         val myIntent = Intent(this, ImageEditorActivity::class.java)

@@ -79,6 +79,11 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
                 checkBox.visibility = View.VISIBLE
                 mImageHero.isClickable = false
                 mImageHero.isFocusable = false
+                checkBox.isChecked = item.isSelected
+                if (checkBox.isChecked) {
+                    count++
+                    listener.onCheck(count)
+                }
                 parent1.setOnClickListener {
 
                     checkBox.isChecked = !checkBox.isChecked

@@ -90,6 +90,8 @@ class ImageEditorActivity : AppCompatActivity() {
 
             }
         }
+        Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
+
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
         mItemSelectedAdapter =
             ItemSelectedAdapter(this, object : ItemSelectedAdapter.OnItemClickListener {
@@ -99,7 +101,8 @@ class ImageEditorActivity : AppCompatActivity() {
                 }
 
                 override fun onOpenFolderClick() {
-                    startAddItem()
+
+                    startAddItem(list)
                 }
 
             })
@@ -254,7 +257,7 @@ class ImageEditorActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val list1 = intent?.getStringArrayListExtra("LIST_ITEM")
-        var insertPos = listHeroSelected.size -2
+        var insertPos = listHeroSelected.size - 2
         if (list1 != null) {
             for (item1 in list1) {
 
@@ -266,15 +269,10 @@ class ImageEditorActivity : AppCompatActivity() {
 
     }
 
-    /**
-     *
-     */
-    private fun addItem() {
 
-    }
-
-    private fun startAddItem() {
+    private fun startAddItem(imagePath: java.util.ArrayList<String>?) {
         val myIntent = Intent(this, AddItemActivity::class.java)
+        myIntent.putStringArrayListExtra("LIST_SELECTED", imagePath as ArrayList<String?>?)
         myIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         this.startActivity(myIntent)
     }
