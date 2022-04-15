@@ -23,6 +23,9 @@ data class Hero(
     /**
      *
      */
-    var isSelected: Boolean = false
+    var isSelected: Boolean = false,
+
+    var isEdited: Boolean = false
+
 )
 

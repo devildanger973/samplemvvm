@@ -48,6 +48,9 @@ class ImageListAdapter(
          */
         val imageData: ImageView = itemView.findViewById(R.id.image_data)
 
+        val imageDataEdit: ImageView = itemView.findViewById(R.id.isEdited1)
+
+
         /**
          *
          */

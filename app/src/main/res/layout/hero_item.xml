@@ -23,6 +23,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+    <ImageView
+        android:id="@+id/isEdited"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"
+        tools:src="@drawable/on_item_edit"
+        android:clickable="false"
+        android:focusable="false"
+        android:background="@drawable/ic_baseline_edit_24"
+        app:layout_constraintBottom_toBottomOf="@+id/image_hero"
+        app:layout_constraintEnd_toEndOf="@+id/image_hero"
+        />
     <CheckBox
         android:id="@+id/checkbox"
         android:layout_width="match_parent"
@@ -31,8 +43,6 @@
         android:focusable="false"
         app:layout_constraintTop_toTopOf="@+id/image_hero"
         app:layout_constraintEnd_toEndOf="@+id/image_hero"
-
-
         />
     <TextView
         android:id="@+id/text_name"

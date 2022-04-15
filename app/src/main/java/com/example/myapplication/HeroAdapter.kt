@@ -23,7 +23,13 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
     /**
      *
      */
+    var isShowEdit: Boolean = false
+
+    /**
+     *
+     */
     var isShowCheck: Boolean = false
+
 
     companion object {
 
@@ -59,6 +65,11 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
         /**
          *
          */
+        val mImageHeroEdit: ImageView = itemView.findViewById(R.id.isEdited)
+
+        /**
+         *
+         */
         val mTextName: TextView = itemView.findViewById(R.id.text_name)
 
         /**
@@ -75,6 +86,13 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
          *
          */
         fun bind(item: Hero, position: Int) {
+            mImageHeroEdit.visibility = View.GONE
+            if (isShowEdit) {
+                if (item.isEdited) {
+
+                    mImageHeroEdit.visibility = View.VISIBLE
+                }
+            }
             if (isShowCheck) {
                 checkBox.visibility = View.VISIBLE
                 mImageHero.isClickable = false
@@ -157,6 +175,11 @@ class HeroAdapter(private val mContext: Context, private val listener: OnItemCli
      */
     fun setShowCheckBox(isCheck: Boolean) {
         isShowCheck = isCheck
+        notifyDataSetChanged()
+    }
+
+    fun setShowEdited(isEdited: Boolean) {
+        isShowEdit = isEdited
         notifyDataSetChanged()
     }
 

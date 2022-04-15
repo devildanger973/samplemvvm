@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                         getDrawable(R.drawable.ic_settings_3110)
                     check = 1
                     arr.clear()
+
                 }
             }
         }
@@ -164,18 +165,29 @@ class MainActivity : AppCompatActivity() {
                 item?.imagePath1?.let { startImageEditor(imagePath = it) }
             }
         })
-        btEdited.setOnClickListener {
-            imageViewModel.allImage.observe(this) { image ->
-                // Update the cached copy of the words in the adapter.
-                image.let { mImageListAdapter.setList(it as MutableList<ImageData>) }
+        imageViewModel.allImage.observe(this) { image ->
+            // Update the cached copy of the words in the adapter.
+            image.let { mImageListAdapter.setList(it as MutableList<ImageData>) }
+            Log.d("CCCCC", "$image")
+            // Select icon edited
+            for ((imagePath1) in image) {
+                for (b in mHeros) {
+                    if (imagePath1 == b.imagePath) {
+                        b.isEdited = true
+                        mHeroAdapter.setShowEdited(true)
+                    }
+                }
             }
+            mHeroAdapter.setList(mHeros)
+        }
+        btEdited.setOnClickListener {
             mRecyclerHero.adapter = mImageListAdapter
+
         }
         btGallery.setOnClickListener {
             mRecyclerHero.adapter = mHeroAdapter
 
         }
-
     }
 
     //Room - Database
@@ -186,6 +198,8 @@ class MainActivity : AppCompatActivity() {
             intentData?.getStringExtra("EXTRA_REPLY")?.let { reply ->
                 val image = ImageData(reply)
                 imageViewModel.insert(image)
+                Log.d("55555", "$reply")
+
             }
         } else {
             Toast.makeText(
@@ -245,6 +259,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startImageList(imagePath: List<String>) {
         val myIntent = Intent(this, ImageEditorActivity::class.java)
+
         myIntent.putStringArrayListExtra("LIST", imagePath as ArrayList<String?>?)
         this.startActivity(myIntent)
     }
