@@ -87,7 +87,7 @@ class ImageEditorActivity : AppCompatActivity() {
                 )
                 Log.d("QQQQQ", "$fileList")
             } else {
-               
+
             }
         }
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
@@ -130,11 +130,13 @@ class ImageEditorActivity : AppCompatActivity() {
             var path = ""
             if (bitmap != null) {
                 path = saveMediaToStorage(bitmap)
-                replyIntent.putExtra("EXTRA_REPLY", path)
+                replyIntent.putExtra("EXTRA_REPLY", filePath)
                 setResult(Activity.RESULT_OK, replyIntent)
                 Log.d("55555", path)
+                Log.d("55555", "$bitmap")
+
             }
-           // setNotificationChannelIntent(id, imagePath = path)
+            setNotificationChannelIntent(id, imagePath = path)
             finish()
         }
 
@@ -458,7 +460,7 @@ class ImageEditorActivity : AppCompatActivity() {
                 // Opening an outputstream with the Uri that we got
                 fos = imageUri?.let { resolver.openOutputStream(it) }
                 imagePath = imageUri.toString()
-                Log.d("check22222", " android > Q $imagePath")
+                Log.d("check22222", imagePath)
             }
         } else {
             // These for devices running on android < Q
