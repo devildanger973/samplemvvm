@@ -55,7 +55,7 @@
         <activity
             android:name=".MarsPhotoActivity"
             android:exported="true" />
-
+        <activity android:name="bottomsheet.ContentActivity"/>
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="true">

@@ -35,4 +35,6 @@
         <item name="actionModeCloseDrawable">@android:drawable/ic_menu_close_clear_cancel</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
     </style>
+<!--Room - Database-->
+
 </resources>

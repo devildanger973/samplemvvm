@@ -29,15 +29,19 @@
         app:layout_constraintTop_toTopOf="@+id/image"
         app:layout_constraintBottom_toBottomOf="@+id/image"
         />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerHero"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        app:layout_constraintTop_toBottomOf="@+id/image"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +50,7 @@
         android:contentDescription="@string/floating"
         android:src="@android:drawable/ic_menu_camera"
         app:layout_constraintBottom_toTopOf="@+id/edited"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />-->
     <Button
         android:id="@+id/gallery"
         android:layout_width="200dp"
@@ -66,4 +70,17 @@
         app:layout_constraintStart_toEndOf="@+id/gallery"
         />
 
+    <!--<include
+        layout="@layout/content_main"
+        android:layout_width="match_parent"
+        android:layout_height="540dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/gallery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />-->
+
+
+    <!-- Adding bottom sheet after main content -->
+    <!--<include layout="@layout/bottom_sheet" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

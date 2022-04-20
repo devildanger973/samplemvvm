@@ -21,10 +21,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import bottomsheet.ContentActivity
+import bottomsheet.ModalBottomSheet
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_ONE
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_TWO
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.messaging.FirebaseMessaging
 import data.*
 import java.io.File
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     /**
      *
      */
-    var arr = mutableListOf<String>()
+    var arr: MutableList<String> = mutableListOf()
 
     /**
      *
@@ -59,6 +60,9 @@ class MainActivity : AppCompatActivity() {
         ImageViewModelFactory((application as ImageApplication).repository)
     }
 
+    /**
+     *
+     */
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
         var check = 1
 
-        val count1: Int = 0
+        val count1 = 0
         val topAppBar: Toolbar = findViewById(R.id.image)
         mHeroAdapter = HeroAdapter(this, object : HeroAdapter.OnItemClickListener {
             override fun onItemClick(item: Hero?) {
@@ -80,7 +84,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onOpenFolderClick() {
-                startGalleryForResult()
+//                startGalleryForResult()
+                takePicture.launch(null)
             }
 
             override fun onCheck(count: Int) {
@@ -138,11 +143,11 @@ class MainActivity : AppCompatActivity() {
         mRecyclerHero.layoutManager = gridLayoutManager
 
         askPermission()
-        val mFloatingActionButton: FloatingActionButton = findViewById(R.id.camera)
-        mFloatingActionButton.setOnClickListener() {
-
-            takePicture.launch(null)
-        }
+//        val mFloatingActionButton: FloatingActionButton = findViewById(R.id.camera)
+//        mFloatingActionButton.setOnClickListener() {
+//
+//            takePicture.launch(null)
+//        }
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
@@ -162,7 +167,7 @@ class MainActivity : AppCompatActivity() {
         val btEdited: Button = findViewById(R.id.edited)
         mImageListAdapter = ImageListAdapter(this, object : ImageListAdapter.OnItemClickListener {
             override fun onItemClick(item: ImageData) {
-                item?.imagePath1?.let { startImageEditor(imagePath = it) }
+                startImageEditor(imagePath = item.imagePath1)
             }
         })
         imageViewModel.allImage.observe(this) { image ->
@@ -180,16 +185,23 @@ class MainActivity : AppCompatActivity() {
             }
             mHeroAdapter.setList(mHeros)
         }
+        var gallery = false
         btEdited.setOnClickListener {
             mRecyclerHero.adapter = mImageListAdapter
 
         }
         btGallery.setOnClickListener {
             mRecyclerHero.adapter = mHeroAdapter
-
+            val modalBottomSheet = ModalBottomSheet()
+            modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
+            /*val myIntent = Intent(this, ContentActivity::class.java)
+            this.startActivity(myIntent)*/
         }
     }
 
+    /**
+     *
+     */
     //Room - Database
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
@@ -198,7 +210,6 @@ class MainActivity : AppCompatActivity() {
             intentData?.getStringExtra("EXTRA_REPLY")?.let { reply ->
                 val image = ImageData(reply)
                 imageViewModel.insert(image)
-                Log.d("55555", "$reply")
 
             }
         } else {
@@ -211,6 +222,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     *
+     */
     fun tokenListener() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -334,12 +348,12 @@ class MainActivity : AppCompatActivity() {
             val dataColumnIndex: Int = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
             //Store the path of the image
             arrPath[i] = cursor?.getString(dataColumnIndex)
-            var a = 1
+            val a = 1
 
             mHeros.add(
                 Hero(
                     name = "image ${a + i}",
-                    imagePath = cursor?.getString(dataColumnIndex).orEmpty(),
+                    imagePath = arrPath[i].orEmpty(),
                     viewType = VIEW_TYPE_ONE
                 )
             )
