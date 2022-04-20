@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -21,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import bottomsheet.ContentActivity
 import bottomsheet.ModalBottomSheet
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_ONE
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_TWO
@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mRecyclerHero: RecyclerView
     private lateinit var mHeroAdapter: HeroAdapter
     private lateinit var mImageListAdapter: ImageListAdapter
-
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     /**
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     private val imageViewModel: ImageViewModel by viewModels {
         ImageViewModelFactory((application as ImageApplication).repository)
     }
-
+//Bottom Sheet
     /**
      *
      */
@@ -185,18 +184,64 @@ class MainActivity : AppCompatActivity() {
             }
             mHeroAdapter.setList(mHeros)
         }
-        var gallery = false
         btEdited.setOnClickListener {
             mRecyclerHero.adapter = mImageListAdapter
 
         }
         btGallery.setOnClickListener {
             mRecyclerHero.adapter = mHeroAdapter
-            val modalBottomSheet = ModalBottomSheet()
+            val modalBottomSheet = ModalBottomSheet() { folder ->
+                folderList(folder.folderPath)
+                mHeroAdapter.setList(mHeros)
+                Log.d("FOLDER_PATH", "$mHeros")
+
+            }
             modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
-            /*val myIntent = Intent(this, ContentActivity::class.java)
-            this.startActivity(myIntent)*/
+
         }
+
+    }
+
+    private fun folderList(folderPath: String) {
+        mHeros.clear()
+        val queryUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val projection = arrayOf(
+            MediaStore.Images.Media.DATA
+        )
+        val selectionFolder = MediaStore.Images.Media.DATA + " like ? "
+        //val f = folderPath.replace("/","//")
+        val selectionargs = arrayOf("%$folderPath%")
+        val cursorFolder = this.contentResolver.query(
+            queryUri,
+            projection,
+            selectionFolder,
+            selectionargs,
+            null
+        )
+        //Total number of images
+        val count: Int = cursorFolder?.count ?: 0
+
+        val arrPath = arrayOfNulls<String>(count)
+
+        for (i in 0 until count) {
+            cursorFolder?.moveToPosition(i)
+            val dataColumnIndex: Int =
+                cursorFolder?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
+            //Store the path of the image
+            arrPath[i] = cursorFolder?.getString(dataColumnIndex)
+            val a = 1
+
+            mHeros.add(
+                Hero(
+                    name = "image ${a + i}",
+                    imagePath = arrPath[i].orEmpty(),
+                    viewType = VIEW_TYPE_ONE
+                )
+            )
+            Log.i("PATH", arrPath[i].orEmpty())
+        }
+// The cursor should be freed up after use with close()
+        cursorFolder?.close()
     }
 
     /**

@@ -22,5 +22,10 @@ data class FolderData(
      *
      */
     var numberOfImage: Int = -1,
-)
+    /**
+     *
+     */
+    var imageFolderPath: String = "",
+
+    )
 
