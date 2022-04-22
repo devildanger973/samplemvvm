@@ -23,11 +23,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
+import implement.swipe.views.CollectionFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -51,6 +54,7 @@ class ImageEditorActivity : AppCompatActivity() {
     /**
      *
      */
+//Tablayout - Viewpager 2
 
     /**
      *
@@ -135,8 +139,7 @@ class ImageEditorActivity : AppCompatActivity() {
                 path = saveMediaToStorage(bitmap)
                 replyIntent.putExtra("EXTRA_REPLY", filePath)
                 setResult(Activity.RESULT_OK, replyIntent)
-                Log.d("55555", path)
-                Log.d("55555", "$bitmap")
+                Log.d("55555", "$filePath")
 
             }
             setNotificationChannelIntent(id, imagePath = path)
@@ -161,9 +164,7 @@ class ImageEditorActivity : AppCompatActivity() {
                     s += 1
                     // Update the progress bar and display the current value
                     val handler: Handler = Handler()
-                    handler.post(Runnable {
-                        progressBar.progress = s
-                    })
+                    handler.post()
                     try {
                         Thread.sleep(100)
                     } catch (e: InterruptedException) {
@@ -189,11 +190,9 @@ class ImageEditorActivity : AppCompatActivity() {
                 progressBar.visibility = View.INVISIBLE
             }).start()
         }
-
-
         mRecyclerList = findViewById(R.id.recyclerList)
+        mRecyclerList.visibility = View.GONE
         mHeros = mutableListOf()
-
         mHeroEditorAdapter =
             HeroEditorAdapter(this, object : HeroEditorAdapter.OnItemClickListener {
                 override fun onItemClick(item: Hero?) {
@@ -223,18 +222,18 @@ class ImageEditorActivity : AppCompatActivity() {
         mHeroEditorAdapter.setList(mHeros)
         createNotificationChannel(id)
         val indicatorSeekBar: IndicatorSeekBar = findViewById(R.id.seekBar)
-        indicatorSeekBar.setOnSeekChangeListener(object : OnSeekChangeListener {
+        indicatorSeekBar.onSeekChangeListener = object : OnSeekChangeListener {
             override fun onSeeking(seekParams: SeekParams) {
                 val diff: Int = seekParams.progress - previousProcess
                 scaleImage(mPhotograph, diff)
                 previousProcess = seekParams.progress
-//                Log.i(TAG, seekParams.seekBar.toString())
-//                Log.i(TAG, seekParams.progress.toString())
-//                Log.i(TAG, seekParams.progressFloat.toString())
-//                Log.i(TAG, seekParams.fromUser.toString())
-//                //when tick count > 0
-//                Log.i(TAG, seekParams.thumbPosition.toString())
-//                Log.i(TAG, seekParams.tickText)
+                //                Log.i(TAG, seekParams.seekBar.toString())
+                //                Log.i(TAG, seekParams.progress.toString())
+                //                Log.i(TAG, seekParams.progressFloat.toString())
+                //                Log.i(TAG, seekParams.fromUser.toString())
+                //                //when tick count > 0
+                //                Log.i(TAG, seekParams.thumbPosition.toString())
+                //                Log.i(TAG, seekParams.tickText)
             }
 
             override fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
@@ -242,10 +241,25 @@ class ImageEditorActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: IndicatorSeekBar) {}
-        })
+        }
 
+//Tablayout Viewpager 2
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            add<CollectionFragment>(R.id.root)
+        }
+        //startAdd()
     }
 
+    private fun startAdd() {
+        val myIntent = Intent(this, CollectionActivity::class.java)
+
+        this.startActivity(myIntent)
+    }
+
+    /**
+     *
+     */
     override fun onDestroy() {
         super.onDestroy()
         listHeroSelected.clear()
@@ -403,7 +417,7 @@ class ImageEditorActivity : AppCompatActivity() {
         /**
          *
          */
-        fun post(runnable: Runnable) {
+        fun post() {
         }
     }
 
@@ -511,7 +525,7 @@ class ImageEditorActivity : AppCompatActivity() {
             val dataColumnIndex: Int = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
             //Store the path of the image
             arrPath[i] = cursor?.getString(dataColumnIndex)
-            var a = 1
+            val a = 1
             mHeros.add(
                 Hero(
                     name = "image ${a + i}",

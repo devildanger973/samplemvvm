@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:max="100"
         android:progress="30"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerList"
+        app:layout_constraintBottom_toTopOf="@+id/root"
         app:layout_constraintEnd_toEndOf="@+id/activity_image"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/activity_image"
@@ -113,12 +113,27 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/root"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="3dp"
         />
 
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="651dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:id="@+id/root"
+        >
+
+
+    </LinearLayout>
 <!--    <ImageButton-->
 <!--        android:id="@+id/HD"-->
 <!--        android:background="@drawable/circle_button"-->
