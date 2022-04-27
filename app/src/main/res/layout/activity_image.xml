@@ -6,16 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/root"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image1"
-        app:layout_constraintStart_toStartOf="parent"
 
-        />
     <Toolbar
         android:id="@+id/image1"
         android:layout_width="match_parent"
@@ -36,20 +27,6 @@
         app:layout_constraintStart_toEndOf="@id/close"
         app:layout_constraintTop_toTopOf="@id/image1"
         tools:ignore="MissingConstraints" />
-
-
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        tools:ignore="MissingConstraints"
-        app:layout_constraintTop_toTopOf="@+id/activity_image"
-        app:layout_constraintStart_toStartOf="@+id/activity_image"
-        app:layout_constraintEnd_toEndOf="@+id/activity_image"
-        app:layout_constraintBottom_toBottomOf="@+id/activity_image"
-
-        />
 
     <com.warkiz.widget.IndicatorSeekBar
         android:id="@+id/seekBar"
@@ -150,6 +127,7 @@
         android:id="@+id/root"
         >
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/work_space"
         android:layout_width="0dp"
@@ -159,6 +137,7 @@
         app:layout_constraintTop_toBottomOf="@id/image1"
         app:layout_constraintStart_toStartOf="parent"
         android:background="#424242">
+
         <com.theartofdev.edmodo.cropper.CropImageView
             android:id="@+id/crop_panel"
             android:layout_width="match_parent"
@@ -166,6 +145,16 @@
             android:layout_gravity="center"
             tools:visibility="visible" />
     </FrameLayout>
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/root"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image1"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerListSelected"
         android:layout_width="match_parent"
@@ -176,77 +165,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="8dp"
         />
-<!--    <ImageButton-->
-<!--        android:id="@+id/HD"-->
-<!--        android:background="@drawable/circle_button"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:src="@android:drawable/ic_menu_view"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/activity_image"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/HD1"-->
-<!--        />-->
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/HD1"-->
-<!--        android:background="@drawable/circle_button"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:src="@android:drawable/ic_menu_view"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
-<!--        app:layout_constraintStart_toEndOf="@id/HD"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/HD2"-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintTop_toTopOf="@+id/activity_image"
+        app:layout_constraintStart_toStartOf="@+id/activity_image"
+        app:layout_constraintEnd_toEndOf="@+id/activity_image"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_image"
 
-
-<!--        />-->
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/HD2"-->
-<!--        android:background="@drawable/circle_button"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginStart="25dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:src="@android:drawable/ic_menu_view"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
-<!--        app:layout_constraintStart_toEndOf="@id/HD1"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/HD3"-->
-
-
-<!--        />-->
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/HD3"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginStart="25dp"-->
-<!--        android:layout_marginEnd="25dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:background="@drawable/circle_button"-->
-<!--        android:src="@android:drawable/ic_menu_view"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
-<!--        app:layout_constraintStart_toEndOf="@id/HD2"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/HD4"-->
-
-<!--        />-->
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/HD4"-->
-<!--        android:background="@drawable/circle_button"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:src="@android:drawable/ic_menu_view"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/recyclerList"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/activity_image"-->
-<!--        app:layout_constraintStart_toEndOf="@id/HD3"-->
-
-<!--        />-->
-
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

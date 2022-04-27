@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +50,13 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     private val id: String = "my_channel_01"
     private var isMultiple: Boolean = false
     private lateinit var listHeroSelected: MutableList<HeroSelected>
+    private lateinit var share: ImageButton
+    private lateinit var progressBar: ProgressBar
+
+    /**
+     *
+     */
+    var mPhotograph: ImageView? = null
 
     /**
      *
@@ -78,12 +86,12 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         setContentView(R.layout.activity_image)
         filePath = intent.getStringExtra("FILE_PATH")
         listHeroSelected = mutableListOf()
-        val mPhotograph: ImageView = findViewById(R.id.image_view)
+        mPhotograph = findViewById(R.id.image_view)
         list = intent.getStringArrayListExtra("LIST")
-        //val uri: Uri = Uri.parse(filePath)
+        val uri: Uri = Uri.parse(filePath)
 
         if (filePath != null) {
-            //mPhotograph.setImageURI(uri)
+            mPhotograph?.setImageURI(uri)
             isMultiple = false
         } else if (list != null) {
             isMultiple = true
@@ -92,8 +100,8 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
             }
             if (listHeroSelected.size != 0) {
                 val fileList = listHeroSelected.first().imagePath
-                //val uri1: Uri = Uri.parse(fileList)
-                //mPhotograph.setImageURI(uri1)
+                val uri1: Uri = Uri.parse(fileList)
+                mPhotograph?.setImageURI(uri1)
                 listHeroSelected.add(
                     HeroSelected(
                         "",
@@ -139,7 +147,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         }
         val save: Button = findViewById(R.id.save)
         save.setOnClickListener {
-            saveImage(cropPanelEdited)
+            saveImage(CropFragment().mPhotograph1)
         }
 
         val close: ImageButton = findViewById(R.id.close)
@@ -147,53 +155,15 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
             finish()
             listHeroSelected.clear()
         }
-        val share: ImageButton = findViewById(R.id.share)
-        val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
-        progressBar.visibility = View.GONE
-        share.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
-            var s = progressBar.progress
-            Thread(Runnable {
-                // this loop will run until the value of i becomes 99
-                while (s < 100) {
-                    s += 1
-                    // Update the progress bar and display the current value
-                    val handler: Handler = Handler()
-                    handler.post()
-                    try {
-                        Thread.sleep(100)
-                    } catch (e: InterruptedException) {
-                        e.printStackTrace()
-                    }
-                }
-                val bmpUri = getLocalBitmapUri(mPhotograph)
-                if (bmpUri != null) {
-                    // Construct a ShareIntent with link to image
-                    val shareIntent = Intent()
-                    shareIntent.action = Intent.ACTION_SEND
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri)
-                    shareIntent.type = "image/png"
-                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    // Launch sharing dialog for image
-                    startActivity(Intent.createChooser(shareIntent, "Share Image"))
-                } else {
-                    // ...sharing failed, handle error
-                }
-                // setting the visibility of the progressbar to invisible
-                // or you can use View.GONE instead of invisible
-                // View.GONE will remove the progressbar
-                progressBar.visibility = View.INVISIBLE
-            }).start()
-        }
         mRecyclerList = findViewById(R.id.recyclerList)
         mRecyclerList.visibility = View.GONE
         mHeros = mutableListOf()
         mHeroEditorAdapter =
             HeroEditorAdapter(this, object : HeroEditorAdapter.OnItemClickListener {
                 override fun onItemClick(item: Hero?) {
-                    val uriItem: Uri = Uri.parse(item?.imagePath)
-                    mPhotograph.setImageURI(uriItem)
+                    val bitMap: Bitmap = BitmapFactory.decodeFile(item?.imagePath)
+                    cropPanelEdited?.setImageBitmap(bitMap)
 
                 }
 
@@ -210,8 +180,8 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 if (result.resultCode == Activity.RESULT_OK) {
                     // There are no request codes
                     val data: Intent? = result.data
-                    val uriGallery: Uri = Uri.parse(data?.data.toString())
-                    mPhotograph.setImageURI(uriGallery)
+                    val bitMap: Bitmap = BitmapFactory.decodeFile(data?.data.toString())
+                    cropPanelEdited?.setImageBitmap(bitMap)
                 }
             }
         listAllImage()
@@ -222,7 +192,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         indicatorSeekBar.onSeekChangeListener = object : OnSeekChangeListener {
             override fun onSeeking(seekParams: SeekParams) {
                 val diff: Int = seekParams.progress - previousProcess
-                scaleImage(mPhotograph, diff)
+                scaleImage(cropPanelEdited ?: return, diff)
                 previousProcess = seekParams.progress
 
             }
@@ -241,12 +211,56 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
             add<CollectionFragment>(R.id.root)
 
         }
+//Share
+
+        share = findViewById(R.id.share)
+        progressBar = findViewById(R.id.progressBar)
+        progressBar.visibility = View.GONE
+        share.setOnClickListener {
+            share()
+        }
 //crop
         cropPanelEdited = findViewById(R.id.crop_panel)
-
     }
 
-    private fun saveImage(v: CropImageView?) {
+    //share
+    private fun share() {
+        progressBar.visibility = View.VISIBLE
+        var s = progressBar.progress
+        Thread(Runnable {
+            // this loop will run until the value of i becomes 99
+            while (s < 100) {
+                s += 1
+                // Update the progress bar and display the current value
+                val handler: Handler = Handler()
+                handler.post()
+                try {
+                    Thread.sleep(100)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+            val bmpUri = getLocalBitmapUri(CropFragment().mPhotograph1 ?: return@Runnable)
+            if (bmpUri != null) {
+                // Construct a ShareIntent with link to image
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri)
+                shareIntent.type = "image/png"
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                // Launch sharing dialog for image
+                startActivity(Intent.createChooser(shareIntent, "Share Image"))
+            } else {
+                // ...sharing failed, handle error
+            }
+            // setting the visibility of the progressbar to invisible
+            // or you can use View.GONE instead of invisible
+            // View.GONE will remove the progressbar
+            progressBar.visibility = View.INVISIBLE
+        }).start()
+    }
+
+    private fun saveImage(v: ImageView?) {
         val replyIntent = Intent(this, MainActivity::class.java)
         // get the bitmap of the view using
         // getScreenShotFromView method it is
@@ -337,8 +351,8 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     /**
      *
      */
-    fun scaleImage(img: ImageView, scale: Int) {
-        var bitmap = (img.drawable as BitmapDrawable).bitmap
+    fun scaleImage(img: CropImageView, scale: Int) {
+        var bitmap = (img.drawToBitmap() as BitmapDrawable).bitmap
         var width = bitmap.width.toFloat()
         var height = bitmap.height.toFloat()
         width += scale * WIDTH_SCALE_RATIO
@@ -430,7 +444,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         }
     }
 
-    private fun getScreenShotFromView(v: CropImageView?): Bitmap? {
+    private fun getScreenShotFromView(v: ImageView?): Bitmap? {
         // create a bitmap object
         var screenshot: Bitmap? = null
         try {
