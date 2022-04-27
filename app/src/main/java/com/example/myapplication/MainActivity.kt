@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mHeroAdapter: HeroAdapter
     private lateinit var mImageListAdapter: ImageListAdapter
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+//crop
+private var loadingDialog: Dialog? = null
 
     /**
      *
@@ -80,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         mHeroAdapter = HeroAdapter(this, object : HeroAdapter.OnItemClickListener {
             override fun onItemClick(item: Hero?) {
                 item?.imagePath?.let { startImageEditor(imagePath = it) }
+
             }
 
             override fun onOpenFolderClick() {
@@ -203,7 +207,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun folderList(folderPath: String) {
-        mHeros.clear()
         val queryUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val projection = arrayOf(
             MediaStore.Images.Media.DATA
@@ -312,7 +315,10 @@ class MainActivity : AppCompatActivity() {
         val myIntent = Intent(this@MainActivity, ImageEditorActivity::class.java)
         myIntent.putExtra("FILE_PATH", imagePath)
         startActivityForResult(myIntent, newWordActivityRequestCode)
-
+        /*loadingDialog = BaseActivity.getLoadingDialog(
+            this, "R.string.iamutkarshtiwari_github_io_ananas_loading",
+            false
+        )*/
     }
 
 

@@ -1,14 +1,12 @@
 package com.example.myapplication
 
-import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -23,13 +21,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
+import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.theartofdev.edmodo.cropper.CropImageView
 import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
+import crop.*
 import implement.swipe.views.CollectionFragment
 import java.io.File
 import java.io.FileOutputStream
@@ -40,7 +39,7 @@ import java.io.OutputStream
 /**
  *
  */
-class ImageEditorActivity : AppCompatActivity() {
+class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     private lateinit var mHeros: MutableList<Hero>
     private lateinit var mRecyclerList: RecyclerView
     private lateinit var mHeroEditorAdapter: HeroEditorAdapter
@@ -54,7 +53,22 @@ class ImageEditorActivity : AppCompatActivity() {
     /**
      *
      */
-//Tablayout - Viewpager 2
+    var filePath: String? = null
+
+    /**
+     *
+     */
+    var list: ArrayList<String>? = null
+
+    /**
+     *
+     */
+//crop
+    var cropPanelEdited: CropImageView? = null
+
+    /**
+     *
+     */
 
     /**
      *
@@ -62,27 +76,24 @@ class ImageEditorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
-        val filePath = intent.getStringExtra("FILE_PATH")
-        Log.d("QQQQQ", "oncreate android > Q $filePath")
+        filePath = intent.getStringExtra("FILE_PATH")
         listHeroSelected = mutableListOf()
         val mPhotograph: ImageView = findViewById(R.id.image_view)
-
-        val list = intent.getStringArrayListExtra("LIST")
+        list = intent.getStringArrayListExtra("LIST")
+        //val uri: Uri = Uri.parse(filePath)
 
         if (filePath != null) {
-            val uri: Uri = Uri.parse(filePath)
-            mPhotograph.setImageURI(uri)
+            //mPhotograph.setImageURI(uri)
             isMultiple = false
-
         } else if (list != null) {
             isMultiple = true
-            for (item in list) {
+            for (item in list ?: return) {
                 listHeroSelected.add(HeroSelected(imagePath = item, viewType = 1))
             }
             if (listHeroSelected.size != 0) {
                 val fileList = listHeroSelected.first().imagePath
-                val uri: Uri = Uri.parse(fileList)
-                mPhotograph.setImageURI(uri)
+                //val uri1: Uri = Uri.parse(fileList)
+                //mPhotograph.setImageURI(uri1)
                 listHeroSelected.add(
                     HeroSelected(
                         "",
@@ -95,13 +106,14 @@ class ImageEditorActivity : AppCompatActivity() {
             }
         }
         Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
+        var bitMap: Bitmap
 
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
         mItemSelectedAdapter =
             ItemSelectedAdapter(this, object : ItemSelectedAdapter.OnItemClickListener {
                 override fun onItemClick(item: HeroSelected) {
-                    val uriItem: Uri = Uri.parse(item.imagePath)
-                    mPhotograph.setImageURI(uriItem)
+                    bitMap = BitmapFactory.decodeFile(item.imagePath)
+                    cropPanelEdited?.setImageBitmap(bitMap)
                 }
 
                 override fun onOpenFolderClick() {
@@ -127,23 +139,7 @@ class ImageEditorActivity : AppCompatActivity() {
         }
         val save: Button = findViewById(R.id.save)
         save.setOnClickListener {
-            val replyIntent = Intent(this, MainActivity::class.java)
-            // get the bitmap of the view using
-            // getScreenShotFromView method it is
-            // implemented below
-            val bitmap = getScreenShotFromView(mPhotograph)
-            // if bitmap is not null then
-            // save it to gallery
-            var path = ""
-            if (bitmap != null) {
-                path = saveMediaToStorage(bitmap)
-                replyIntent.putExtra("EXTRA_REPLY", filePath)
-                setResult(Activity.RESULT_OK, replyIntent)
-                Log.d("55555", "$filePath")
-
-            }
-            setNotificationChannelIntent(id, imagePath = path)
-            finish()
+            saveImage(cropPanelEdited)
         }
 
         val close: ImageButton = findViewById(R.id.close)
@@ -222,18 +218,13 @@ class ImageEditorActivity : AppCompatActivity() {
         mHeroEditorAdapter.setList(mHeros)
         createNotificationChannel(id)
         val indicatorSeekBar: IndicatorSeekBar = findViewById(R.id.seekBar)
+        indicatorSeekBar.visibility = View.GONE
         indicatorSeekBar.onSeekChangeListener = object : OnSeekChangeListener {
             override fun onSeeking(seekParams: SeekParams) {
                 val diff: Int = seekParams.progress - previousProcess
                 scaleImage(mPhotograph, diff)
                 previousProcess = seekParams.progress
-                //                Log.i(TAG, seekParams.seekBar.toString())
-                //                Log.i(TAG, seekParams.progress.toString())
-                //                Log.i(TAG, seekParams.progressFloat.toString())
-                //                Log.i(TAG, seekParams.fromUser.toString())
-                //                //when tick count > 0
-                //                Log.i(TAG, seekParams.thumbPosition.toString())
-                //                Log.i(TAG, seekParams.tickText)
+
             }
 
             override fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
@@ -244,17 +235,35 @@ class ImageEditorActivity : AppCompatActivity() {
         }
 
 //Tablayout Viewpager 2
+
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             add<CollectionFragment>(R.id.root)
+
         }
-        //startAdd()
+//crop
+        cropPanelEdited = findViewById(R.id.crop_panel)
+
     }
 
-    private fun startAdd() {
-        val myIntent = Intent(this, CollectionActivity::class.java)
+    private fun saveImage(v: CropImageView?) {
+        val replyIntent = Intent(this, MainActivity::class.java)
+        // get the bitmap of the view using
+        // getScreenShotFromView method it is
+        // implemented below
+        val bitmap = getScreenShotFromView(v)
+        // if bitmap is not null then
+        // save it to gallery
+        var path = ""
+        if (bitmap != null) {
+            path = saveMediaToStorage(bitmap)
+            replyIntent.putExtra("EXTRA_REPLY", filePath)
+            setResult(Activity.RESULT_OK, replyIntent)
+            Log.d("55555", "$filePath")
 
-        this.startActivity(myIntent)
+        }
+        setNotificationChannelIntent(id, imagePath = path)
+        finish()
     }
 
     /**
@@ -421,7 +430,7 @@ class ImageEditorActivity : AppCompatActivity() {
         }
     }
 
-    private fun getScreenShotFromView(v: View): Bitmap? {
+    private fun getScreenShotFromView(v: CropImageView?): Bitmap? {
         // create a bitmap object
         var screenshot: Bitmap? = null
         try {
@@ -430,11 +439,13 @@ class ImageEditorActivity : AppCompatActivity() {
             // requires three parameters
             // width and height of the view and
             // the background color
-            screenshot =
-                Bitmap.createBitmap(v.measuredWidth, v.measuredHeight, Bitmap.Config.ARGB_8888)
+            if (v != null) {
+                screenshot =
+                    Bitmap.createBitmap(v.measuredWidth, v.measuredHeight, Bitmap.Config.ARGB_8888)
+            }
             // Now draw this bitmap on a canvas
-            val canvas = Canvas(screenshot)
-            v.draw(canvas)
+            val canvas = screenshot?.let { Canvas(it) }
+            v?.draw(canvas)
         } catch (e: Exception) {
             Log.e("GFG", "Failed to capture screenshot because:" + e.message)
         }
@@ -537,5 +548,11 @@ class ImageEditorActivity : AppCompatActivity() {
         }
 // The cursor should be freed up after use with close()
         cursor?.close()
+    }
+
+    override fun showLoadingDialog() {
+    }
+
+    override fun dismissLoadingDialog() {
     }
 }

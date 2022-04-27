@@ -5,18 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     >
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerListSelected"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/image1"
-        app:layout_constraintStart_toStartOf="parent"
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/root"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image1"
+        app:layout_constraintStart_toStartOf="parent"
 
-        android:layout_marginBottom="8dp"
         />
     <Toolbar
         android:id="@+id/image1"
@@ -33,18 +31,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-
         android:background="@drawable/roundsquare_button"
         android:text="Hide"
         app:layout_constraintStart_toEndOf="@id/close"
         app:layout_constraintTop_toTopOf="@id/image1"
         tools:ignore="MissingConstraints" />
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -118,12 +111,37 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="3dp"
         />
+    <LinearLayout
+        android:id="@+id/redo_undo_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/root"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:paddingBottom="16dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/root"
+        >
 
+        <ImageView
+            android:id="@+id/undo_btn"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/ic_baseline_undo_24" />
+
+        <ImageView
+            android:id="@+id/redo_btn"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_baseline_redo_24" />
+    </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteY="651dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -131,9 +149,33 @@
         android:orientation="vertical"
         android:id="@+id/root"
         >
-
-
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/work_space"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/root"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image1"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="#424242">
+        <com.theartofdev.edmodo.cropper.CropImageView
+            android:id="@+id/crop_panel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            tools:visibility="visible" />
+    </FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerListSelected"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/image1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp"
+        />
 <!--    <ImageButton-->
 <!--        android:id="@+id/HD"-->
 <!--        android:background="@drawable/circle_button"-->

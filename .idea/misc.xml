@@ -16,11 +16,15 @@
         <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/provider_paths.xml" value="0.20416666666666666" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/border_image.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/circle_button.xml" value="0.2115" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.1475" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.1475" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_baseline_crop_16_9_30.xml" value="0.1475" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_baseline_crop_30.xml" value="0.1475" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_settings_3110.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/item_background.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/on_item_edit.xml" value="0.1475" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/on_item_select.xml" value="0.1" />
-        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/activity_image.xml" value="0.25" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/activity_image.xml" value="0.22" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/activity_image_sever.xml" value="0.17074275362318841" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/activity_new_word.xml" value="0.19701086956521738" />
@@ -30,8 +34,10 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/collection_demo.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/collection_demo_activity.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/content_main.xml" value="0.18" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/crop.xml" value="0.33" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_bottom_sheet_dialog.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_collection_object.xml" value="0.19701086956521738" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_edit_image_crop.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_overview.xml" value="0.17074275362318841" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/grid_view_item.xml" value="0.13072916666666667" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/hero_editor_item.xml" value="0.25" />
@@ -39,6 +45,7 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/hero_item.xml" value="0.47368421052631576" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/hero_item_open_photo.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/image_data.xml" value="0.75" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/item_crop.xml" value="1.5" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/item_selected.xml" value="0.6440677966101694" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/item_selected_add.xml" value="0.67" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/recyclerview_item.xml" value="0.19701086956521738" />
