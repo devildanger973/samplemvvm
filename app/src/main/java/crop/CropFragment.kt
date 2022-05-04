@@ -1,9 +1,8 @@
 package crop
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.Image
+import android.graphics.*
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.theartofdev.edmodo.cropper.CropImageView
+import crop.rotate.RotateImageView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlin.math.roundToInt
 
 
@@ -43,7 +45,7 @@ class CropFragment : BaseEditFragment() {
      *
      */
 
-    var mPhotograph1: ImageView? = null
+    private var mPhotograph1: ImageViewTouch? = null
     private var list1: ArrayList<String>? = null
     private var bitMap: Bitmap? = null
     private lateinit var root: View
@@ -51,13 +53,20 @@ class CropFragment : BaseEditFragment() {
     //Crop apply
     private var disposables: CompositeDisposable? = CompositeDisposable()
     private var loadingDialogListener: OnLoadingDialogListener? = null
-    val MODE_NONE = 0
-    val MODE_TEXT = 5
-    var mode: Int = MODE_NONE
+    private val MODE_NONE = 0
+    private val MODE_CROP = 3
+    private val MODE_ROTATE = 4
+    private val MODE_TEXT = 5
+    private var mode: Int = MODE_NONE
     private val onMainBitmapChangeListener: OnMainBitmapChangeListener? = null
     private var numberOfOperations = 0
     private var isBeenSaved = false
 
+    //rotate
+    private var rotatePanel: RotateImageView? = null
+    private var rotateLeft: ImageView? = null
+    private var rotateRight: ImageView? = null
+    private lateinit var applyRotationDisposable: Disposable
 
     /**
      *
@@ -85,25 +94,139 @@ class CropFragment : BaseEditFragment() {
             }
         })
         cropPanel = ensureEditActivity()?.cropPanelEdited
+        rotatePanel = ensureEditActivity()?.rotatePanelEdited
         mPhotograph1 = ensureEditActivity()?.mPhotograph
         addItemCrop()
         viewImage()
+        rotate()
+        cancel()
         apply()
         root.findViewById<RecyclerView>(R.id.recyclerCrop).adapter = mCropAdapter
         mCropAdapter.setList(mItemCrop)
         return root
+    }
 
+    //Rotate
+    private fun rotate() {
+        val rotate: ImageView = root.findViewById(R.id.rotate)
+        rotateLeft = root.findViewById(R.id.rotate_left)
+        rotateRight = root.findViewById(R.id.rotate_right)
+        mPhotograph1?.displayType
+        rotatePanel?.setImageBitmap(getMainBit())
+        rotatePanel?.reset()
+        rotate.setOnClickListener {
+            startRotate()
+            Log.d("getMainBit()()", "$bitMap")
+        }
+        loadingDialogListener = ensureEditActivity()
+
+    }
+
+    private fun startRotate() {
+        cropPanel?.visibility = View.GONE
+        mPhotograph1?.visibility = View.GONE
+        rotatePanel?.visibility = View.VISIBLE
+        rotateLeft?.setOnClickListener {
+            rotatePanel?.rotation = ((rotatePanel?.rotateAngle ?: return@setOnClickListener) - 90)
+            rotatePanel?.rotateImage(rotatePanel?.rotation)
+        }
+        rotateRight?.setOnClickListener {
+            rotatePanel?.rotation = ((rotatePanel?.rotateAngle ?: return@setOnClickListener) + 90)
+            rotatePanel?.rotateImage(rotatePanel?.rotation)
+
+
+        }
+    }
+
+    private fun applyRotateImage() {
+        if (rotatePanel!!.rotateAngle === 0f || rotatePanel!!.rotateAngle % 360 === 0f) {
+            backToMain()
+        } else {
+            applyRotationDisposable = (applyRotation(getMainBit()!!)
+                ?.subscribeOn(Schedulers.computation())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.doOnSubscribe { loadingDialogListener?.showLoadingDialog() }
+                ?.doFinally { loadingDialogListener?.dismissLoadingDialog() }
+                ?.subscribe({ processedBitmap: Bitmap? ->
+                    if (processedBitmap == null) return@subscribe
+                    applyAndExit(processedBitmap)
+                }, { _: Throwable? -> })
+                ?: disposables?.add(applyRotationDisposable)) as Disposable
+        }
+    }
+
+    private fun applyRotation(sourceBitmap: Bitmap): Single<Bitmap>? {
+        return Single.fromCallable {
+            val imageRect: RectF = rotatePanel?.imageNewRect!!
+            val resultBitmap = Bitmap.createBitmap(
+                imageRect.width().toInt(),
+                imageRect.height().toInt(), Bitmap.Config.ARGB_4444
+            )
+            val canvas = Canvas(resultBitmap)
+            val w = sourceBitmap.width shr 1
+            val h = sourceBitmap.height shr 1
+            val centerX = imageRect.width() / 2
+            val centerY = imageRect.height() / 2
+            val left = centerX - w
+            val top = centerY - h
+            val destinationRect = RectF(
+                left, top, left + sourceBitmap.width, top
+                        + sourceBitmap.height
+            )
+            canvas.save()
+            canvas.rotate(
+                rotatePanel!!.rotateAngle,
+                imageRect.width() / 2,
+                imageRect.height() / 2
+            )
+            canvas.drawBitmap(
+                sourceBitmap,
+                Rect(
+                    0,
+                    0,
+                    sourceBitmap.width,
+                    sourceBitmap.height
+                ),
+                destinationRect,
+                null
+            )
+            canvas.restore()
+            resultBitmap
+        }
+    }
+
+    private fun applyAndExit(resultBitmap: Bitmap) {
+        changeMainBitmap(resultBitmap, true)
+        backToMain()
+    }
+
+    //Rotate
+    private fun cancel() {
+        val cancelBtn: ImageView = root.findViewById(R.id.cancel_crop)
+        cancelBtn.setOnClickListener {
+            rotatePanel?.visibility = View.GONE
+            cropPanel?.visibility = View.GONE
+            mPhotograph1?.visibility = View.VISIBLE
+        }
     }
 
     // crop apply
     private fun apply() {
         val applyBtn: ImageView = root.findViewById(R.id.apply)
-        applyBtn.setOnClickListener() {
-            applyCropImage()
+        applyBtn.setOnClickListener {
             mPhotograph1?.visibility = View.VISIBLE
             cropPanel?.visibility = View.GONE
+            rotatePanel?.visibility = View.GONE
+            applyCropImage()
+            //applyRotateImage()
+            /*when (mode) {
+                MODE_CROP -> applyCropImage()
+                MODE_ROTATE -> applyRotateImage()
+            }*/
         }
         loadingDialogListener = ensureEditActivity()
+        Log.d("getMainBit()()", "${bitMap}")
+
     }
 
     private fun applyCropImage() {
@@ -132,9 +255,10 @@ class CropFragment : BaseEditFragment() {
                 increaseOpTimes()
             }
             bitMap = newBit
-            mPhotograph1?.setImageBitmap(bitMap)
-            cropPanel?.setImageBitmap(bitMap)
-            //mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN)
+            mPhotograph1?.setImageBitmap(getMainBit())
+            rotatePanel?.setImageBitmap(getMainBit())
+            cropPanel?.setImageBitmap(getMainBit())
+            mPhotograph1?.displayType
             if (mode == MODE_TEXT) {
                 onMainBitmapChangeListener?.onMainBitmapChange()
             }
@@ -154,23 +278,35 @@ class CropFragment : BaseEditFragment() {
 //ViewImage
     private fun viewImage() {
         mPhotograph1?.visibility = View.GONE
-        ensureEditActivity()?.cropPanelEdited?.visibility = View.VISIBLE
+        rotatePanel?.visibility = View.GONE
+        cropPanel?.visibility = View.VISIBLE
         if (ensureEditActivity()?.filePath != null) {
             filePath1 = ensureEditActivity()?.filePath
             bitMap = BitmapFactory.decodeFile(filePath1)
-            cropPanel?.setImageBitmap(bitMap)
+            cropPanel?.setImageBitmap(getMainBit())
+            mPhotograph1?.displayType
+            cropPanel?.setFixedAspectRatio(false)
         } else if (ensureEditActivity()?.list != null) {
             list1 = ensureEditActivity()?.list
             for (item in list1 ?: return) {
                 val fileList = (list1 ?: return).first()
                 bitMap = BitmapFactory.decodeFile(fileList)
-                cropPanel?.setImageBitmap(bitMap)
+                cropPanel?.setImageBitmap(getMainBit())
+                mPhotograph1?.displayType
+                cropPanel?.setFixedAspectRatio(false)
             }
         }
+        Log.d("getMainBit()()", "$bitMap")
+
+    }
+
+    private fun getMainBit(): Bitmap? {
+        return bitMap
     }
 
     private fun startCrop(item: ItemCrop?) {
         mPhotograph1?.visibility = View.GONE
+        rotatePanel?.visibility = View.GONE
         cropPanel?.visibility = View.VISIBLE
         when {
             (item ?: return).ratioText === RatioText.FREE -> {
@@ -185,6 +321,8 @@ class CropFragment : BaseEditFragment() {
                 cropPanel?.setAspectRatio(aspectRatio.aspectX.roundToInt(), aspectRatio.aspectY)
             }
         }
+        Log.d("getMainBit()()", "$bitMap")
+
     }
 //ViewImage
     /**

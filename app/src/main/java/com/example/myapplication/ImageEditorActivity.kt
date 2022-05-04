@@ -5,9 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.*
@@ -30,6 +28,7 @@ import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
 import crop.*
+import crop.rotate.RotateImageView
 import implement.swipe.views.CollectionFragment
 import java.io.File
 import java.io.FileOutputStream
@@ -56,7 +55,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     /**
      *
      */
-    var mPhotograph: ImageView? = null
+    var mPhotograph: ImageViewTouch? = null
 
     /**
      *
@@ -76,6 +75,11 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
 
     /**
      *
+     *///rotate
+    var rotatePanelEdited: RotateImageView? = null
+
+    /**
+     *
      */
 
     /**
@@ -85,12 +89,12 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
         filePath = intent.getStringExtra("FILE_PATH")
-        listHeroSelected = mutableListOf()
         mPhotograph = findViewById(R.id.image_view)
+        listHeroSelected = mutableListOf()
         list = intent.getStringArrayListExtra("LIST")
-        val uri: Uri = Uri.parse(filePath)
 
         if (filePath != null) {
+            val uri: Uri = Uri.parse(filePath)
             mPhotograph?.setImageURI(uri)
             isMultiple = false
         } else if (list != null) {
@@ -110,18 +114,18 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 )
                 Log.d("QQQQQ", "$fileList")
             } else {
-
+                Log.d("QQQQQ", "")
             }
         }
         Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
         var bitMap: Bitmap
-
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
         mItemSelectedAdapter =
             ItemSelectedAdapter(this, object : ItemSelectedAdapter.OnItemClickListener {
                 override fun onItemClick(item: HeroSelected) {
                     bitMap = BitmapFactory.decodeFile(item.imagePath)
                     cropPanelEdited?.setImageBitmap(bitMap)
+
                 }
 
                 override fun onOpenFolderClick() {
@@ -147,22 +151,20 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         }
         val save: Button = findViewById(R.id.save)
         save.setOnClickListener {
-            saveImage(CropFragment().mPhotograph1)
+            saveImage(mPhotograph)
         }
-
         val close: ImageButton = findViewById(R.id.close)
         close.setOnClickListener {
             finish()
             listHeroSelected.clear()
         }
-
         mRecyclerList = findViewById(R.id.recyclerList)
         mRecyclerList.visibility = View.GONE
         mHeros = mutableListOf()
         mHeroEditorAdapter =
             HeroEditorAdapter(this, object : HeroEditorAdapter.OnItemClickListener {
                 override fun onItemClick(item: Hero?) {
-                    val bitMap: Bitmap = BitmapFactory.decodeFile(item?.imagePath)
+                    bitMap = BitmapFactory.decodeFile(item?.imagePath)
                     cropPanelEdited?.setImageBitmap(bitMap)
 
                 }
@@ -180,8 +182,9 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 if (result.resultCode == Activity.RESULT_OK) {
                     // There are no request codes
                     val data: Intent? = result.data
-                    val bitMap: Bitmap = BitmapFactory.decodeFile(data?.data.toString())
+                    bitMap = BitmapFactory.decodeFile(data?.data.toString())
                     cropPanelEdited?.setImageBitmap(bitMap)
+
                 }
             }
         listAllImage()
@@ -194,13 +197,9 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 val diff: Int = seekParams.progress - previousProcess
                 scaleImage(cropPanelEdited ?: return, diff)
                 previousProcess = seekParams.progress
-
             }
 
-            override fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
-
-            }
-
+            override fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {}
             override fun onStopTrackingTouch(seekBar: IndicatorSeekBar) {}
         }
 
@@ -221,6 +220,9 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         }
 //crop
         cropPanelEdited = findViewById(R.id.crop_panel)
+//rotate
+        rotatePanelEdited = findViewById(R.id.rotate_panel)
+
     }
 
     //share
@@ -232,7 +234,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
             while (s < 100) {
                 s += 1
                 // Update the progress bar and display the current value
-                val handler: Handler = Handler()
+                val handler = Handler()
                 handler.post()
                 try {
                     Thread.sleep(100)
@@ -240,7 +242,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                     e.printStackTrace()
                 }
             }
-            val bmpUri = getLocalBitmapUri(CropFragment().mPhotograph1 ?: return@Runnable)
+            val bmpUri = getLocalBitmapUri(mPhotograph ?: return@Runnable)
             if (bmpUri != null) {
                 // Construct a ShareIntent with link to image
                 val shareIntent = Intent()
@@ -260,7 +262,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         }).start()
     }
 
-    private fun saveImage(v: ImageView?) {
+    private fun saveImage(v: ImageViewTouch?) {
         val replyIntent = Intent(this, MainActivity::class.java)
         // get the bitmap of the view using
         // getScreenShotFromView method it is
@@ -309,7 +311,10 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
 
     private fun startAddItem(imagePath: java.util.ArrayList<String>?) {
         val myIntent = Intent(this, AddItemActivity::class.java)
-        myIntent.putStringArrayListExtra("LIST_SELECTED", imagePath as ArrayList<String?>?)
+        myIntent.putStringArrayListExtra(
+            "LIST_SELECTED",
+            imagePath as kotlin.collections.ArrayList<String?>
+        )
         myIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         this.startActivity(myIntent)
     }
@@ -382,7 +387,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
 
     }
 
-    private fun getLocalBitmapUri(imageView: ImageView): Uri? {
+    private fun getLocalBitmapUri(imageView: ImageViewTouch): Uri? {
         // Extract Bitmap from ImageView drawable
         val drawable = imageView.drawable
         var bmp: Bitmap? = null
@@ -444,7 +449,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         }
     }
 
-    private fun getScreenShotFromView(v: ImageView?): Bitmap? {
+    private fun getScreenShotFromView(v: ImageViewTouch?): Bitmap? {
         // create a bitmap object
         var screenshot: Bitmap? = null
         try {
@@ -564,9 +569,15 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         cursor?.close()
     }
 
+    /**
+     *
+     */
     override fun showLoadingDialog() {
     }
 
+    /**
+     *
+     */
     override fun dismissLoadingDialog() {
     }
 }

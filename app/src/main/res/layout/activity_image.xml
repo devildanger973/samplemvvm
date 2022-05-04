@@ -138,6 +138,12 @@
         app:layout_constraintStart_toStartOf="parent"
         android:background="#424242">
 
+        <crop.rotate.RotateImageView
+            android:id="@+id/rotate_panel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="visible" />
         <com.theartofdev.edmodo.cropper.CropImageView
             android:id="@+id/crop_panel"
             android:layout_width="match_parent"
@@ -145,7 +151,7 @@
             android:layout_gravity="center"
             tools:visibility="visible" />
     </FrameLayout>
-    <ImageView
+    <crop.ImageViewTouch
         android:id="@+id/image_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
