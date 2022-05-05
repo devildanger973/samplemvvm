@@ -29,6 +29,7 @@ import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
 import crop.*
 import crop.rotate.RotateImageView
+import filter.FilterListFragment
 import implement.swipe.views.CollectionFragment
 import java.io.File
 import java.io.FileOutputStream
@@ -80,7 +81,8 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
 
     /**
      *
-     */
+     *///filter
+    var filterListFragment: FilterListFragment? = null
 
     /**
      *
