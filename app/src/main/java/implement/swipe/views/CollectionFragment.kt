@@ -12,6 +12,7 @@ import com.example.myapplication.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import crop.*
+import filter.FilterListFragment
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -47,7 +48,7 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
         collectionAdapter = CollectionAdapter(requireActivity())
         collectionAdapter.addFragment(CropFragment(), "Crop")
         collectionAdapter.addFragment(DemoObjectFragment(), "Rotate")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Filter")
+        collectionAdapter.addFragment(FilterListFragment(), "Filter")
         collectionAdapter.addFragment(DemoObjectFragment(), "Saturation")
         collectionAdapter.addFragment(DemoObjectFragment(), "Brightness")
         collectionAdapter.addFragment(DemoObjectFragment(), "Portrait")

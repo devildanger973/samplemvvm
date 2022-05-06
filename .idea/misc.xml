@@ -21,6 +21,7 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_baseline_crop_16_9_30.xml" value="0.1475" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_baseline_crop_30.xml" value="0.1475" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_settings_3110.xml" value="0.1" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/image_edit_back.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/item_background.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/on_item_edit.xml" value="0.1475" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/on_item_select.xml" value="0.1" />
@@ -35,6 +36,8 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/collection_demo_activity.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/content_main.xml" value="0.18" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/crop.xml" value="0.33" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/filter.xml" value="0.22" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/filter_item.xml" value="0.33" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_bottom_sheet_dialog.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_collection_object.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_edit_image_crop.xml" value="0.19701086956521738" />

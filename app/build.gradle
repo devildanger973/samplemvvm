@@ -8,7 +8,15 @@ plugins {
 
 android {
     compileSdk 32
+    externalNativeBuild {
 
+        // Encapsulates your CMake build configurations.
+        ndkBuild {
+
+            // Provides a relative path to your CMake build script.
+            path = file("jni/Android.mk")
+        }
+    }
     defaultConfig {
         applicationId "com.example.myapplication"
         minSdk 21

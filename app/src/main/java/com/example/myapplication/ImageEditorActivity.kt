@@ -1,18 +1,28 @@
 package com.example.myapplication
 
-import android.app.*
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -20,14 +30,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.drawToBitmap
-import androidx.fragment.app.*
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
-import crop.*
+import crop.ImageViewTouch
+import crop.OnLoadingDialogListener
 import crop.rotate.RotateImageView
 import filter.FilterListFragment
 import implement.swipe.views.CollectionFragment
@@ -83,6 +95,10 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
      *
      *///filter
     var filterListFragment: FilterListFragment? = null
+    private var bitMap: Bitmap? = null
+    fun getMainBit(): Bitmap? {
+        return bitMap
+    }
 
     /**
      *
@@ -94,6 +110,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         mPhotograph = findViewById(R.id.image_view)
         listHeroSelected = mutableListOf()
         list = intent.getStringArrayListExtra("LIST")
+        bitMap = BitmapFactory.decodeFile(filePath)
 
         if (filePath != null) {
             val uri: Uri = Uri.parse(filePath)
@@ -224,7 +241,24 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         cropPanelEdited = findViewById(R.id.crop_panel)
 //rotate
         rotatePanelEdited = findViewById(R.id.rotate_panel)
+        filterListFragment = FilterListFragment.newInstance()
 
+    }
+
+    fun changeMainBitmap(newBit: Bitmap?, needPushUndoStack: Boolean) {
+        if (newBit == null) return
+        if (bitMap == null || bitMap != newBit) {
+            if (needPushUndoStack) {
+                //redoUndoController.switchMainBit(bitMap, newBit)
+                //increaseOpTimes()
+            }
+            bitMap = newBit
+            mPhotograph?.setImageBitmap(bitMap)
+            mPhotograph?.displayType
+            /*if (mode == ImageEditorActivity.MODE_TEXT) {
+                onMainBitmapChangeListener.onMainBitmapChange()
+            }*/
+        }
     }
 
     //share

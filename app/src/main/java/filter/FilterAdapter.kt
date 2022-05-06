@@ -11,8 +11,11 @@ class FilterAdapter(
     private val context: Context
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val filters: Array<String>
-    private val filterImages: Array<String>
+    private val filters: Array<String> =
+        filterListFragment.resources.getStringArray(R.array.iamutkarshtiwari_github_io_ananas_filters)
+    private val filterImages: Array<String> =
+        filterListFragment.resources.getStringArray(R.array.iamutkarshtiwari_github_io_ananas_filter_drawable_list)
+
     override fun getItemCount(): Int {
         return filterImages.size
     }
@@ -37,17 +40,11 @@ class FilterAdapter(
             filterListFragment.resources.getIdentifier(imageUrl, "drawable", context.packageName)
         filterViewHolder.icon.setImageDrawable(filterListFragment.resources.getDrawable(imageKey))
         filterViewHolder.icon.tag = pos
-        filterViewHolder.icon.setOnClickListener { v -> filterListFragment.enableFilter(pos) }
+        filterViewHolder.icon.setOnClickListener { filterListFragment.enableFilter(pos) }
     }
 
     companion object {
         private const val DEFAULT_TYPE = 1
     }
 
-    init {
-        filters =
-            filterListFragment.resources.getStringArray(R.array.iamutkarshtiwari_github_io_ananas_filters)
-        filterImages =
-            filterListFragment.resources.getStringArray(R.array.iamutkarshtiwari_github_io_ananas_filter_drawable_list)
-    }
 }
