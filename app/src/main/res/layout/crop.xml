@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
-        android:id="@+id/close_crop"
+        android:id="@+id/cancel_crop"
         android:foreground="?selectableItemBackground"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -25,39 +25,41 @@
 
     <ImageView
         android:foreground="?selectableItemBackground"
-        android:id="@+id/imageView"
+        android:id="@+id/rotate"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="60dp"
         android:background="@drawable/ic_baseline_crop_rotate_30"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/rotate_right"
+        app:layout_constraintStart_toEndOf="@+id/rotate_left"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:foreground="?selectableItemBackground"
-        android:id="@+id/imageView2"
+        android:id="@+id/rotate_left"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="60dp"
         android:background="@drawable/ic_baseline_keyboard_arrow_left_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <ImageView
         android:foreground="?selectableItemBackground"
-        android:id="@+id/imageView3"
+        android:id="@+id/rotate_right"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="60dp"
         android:background="@drawable/ic_baseline_keyboard_arrow_right_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <com.warkiz.widget.IndicatorSeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/rotate"
         app:layout_constraintBottom_toTopOf="@+id/recyclerCrop"
         android:layout_marginTop="20dp"
         tools:layout_editor_absoluteX="16dp" />
