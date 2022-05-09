@@ -54,8 +54,6 @@ class CropFragment : BaseEditFragment() {
     private var disposables: CompositeDisposable? = CompositeDisposable()
     private var loadingDialogListener: OnLoadingDialogListener? = null
     private val MODE_NONE = 0
-    private val MODE_CROP = 3
-    private val MODE_ROTATE = 4
     private val MODE_TEXT = 5
     private var mode: Int = MODE_NONE
     private val onMainBitmapChangeListener: OnMainBitmapChangeListener? = null
@@ -142,7 +140,7 @@ class CropFragment : BaseEditFragment() {
         if (rotatePanel!!.rotateAngle === 0f || rotatePanel!!.rotateAngle % 360 === 0f) {
             backToMain()
         } else {
-            applyRotationDisposable = (applyRotation(getMainBit()!!)
+            applyRotationDisposable = (applyRotation(getMainBit() ?: return)
                 ?.subscribeOn(Schedulers.computation())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.doOnSubscribe { loadingDialogListener?.showLoadingDialog() }
@@ -196,7 +194,7 @@ class CropFragment : BaseEditFragment() {
     }
 
     private fun applyAndExit(resultBitmap: Bitmap) {
-        changeMainBitmap(resultBitmap, true)
+        ensureEditActivity()?.changeMainBitmap(resultBitmap, true)
         backToMain()
     }
 
@@ -237,7 +235,7 @@ class CropFragment : BaseEditFragment() {
                 .doOnSubscribe { loadingDialogListener?.showLoadingDialog() }
                 .doFinally { loadingDialogListener?.dismissLoadingDialog() }
                 .subscribe({ bitmap: Bitmap? ->
-                    changeMainBitmap(bitmap, true)
+                    ensureEditActivity()?.changeMainBitmap(bitmap, true)
                     backToMain()
                 }, { e: Throwable ->
                     e.printStackTrace()
@@ -245,24 +243,6 @@ class CropFragment : BaseEditFragment() {
                     Toast.makeText(context, "Error while saving image", Toast.LENGTH_SHORT).show()
                 })
         )
-    }
-
-    private fun changeMainBitmap(newBit: Bitmap?, needPushUndoStack: Boolean) {
-        if (newBit == null) return
-        if (bitMap == null || bitMap != newBit) {
-            if (needPushUndoStack) {
-                //redoUndoController.switchMainBit(bitMap, newBit)
-                increaseOpTimes()
-            }
-            bitMap = newBit
-            mPhotograph1?.setImageBitmap(getMainBit())
-            rotatePanel?.setImageBitmap(getMainBit())
-            cropPanel?.setImageBitmap(getMainBit())
-            mPhotograph1?.displayType
-            if (mode == MODE_TEXT) {
-                onMainBitmapChangeListener?.onMainBitmapChange()
-            }
-        }
     }
 
     private fun increaseOpTimes() {
@@ -352,7 +332,7 @@ class CropFragment : BaseEditFragment() {
         )
         mItemCrop.add(
             ItemCrop(
-                ratioText = RatioText.RATIO_4_5, itemCrop = R.drawable.hulk,
+                ratioText = RatioText.RATIO_4_5, itemCrop = R.drawable.spiderman,
                 name = "4:5"
             )
         )
@@ -372,7 +352,7 @@ class CropFragment : BaseEditFragment() {
         )
         mItemCrop.add(
             ItemCrop(
-                ratioText = RatioText.RATIO_3_4, itemCrop = R.drawable.hulk,
+                ratioText = RatioText.RATIO_3_4, itemCrop = R.drawable.kin,
                 name = "3:4"
             )
         )
@@ -398,7 +378,7 @@ class CropFragment : BaseEditFragment() {
         )
         mItemCrop.add(
             ItemCrop(
-                ratioText = RatioText.RATIO_1_2, itemCrop = R.drawable.hulk,
+                ratioText = RatioText.RATIO_1_2, itemCrop = R.drawable.kin,
                 name = "1:2"
             )
         )
@@ -410,13 +390,14 @@ class CropFragment : BaseEditFragment() {
         )
         mItemCrop.add(
             ItemCrop(
-                ratioText = RatioText.RATIO_2_3, itemCrop = R.drawable.hulk,
+                ratioText = RatioText.RATIO_2_3, itemCrop = R.drawable.kin,
                 name = "2:3"
             )
         )
         mItemCrop.add(
             ItemCrop(
-                ratioText = RatioText.RATIO_2_1, itemCrop = R.drawable.hulk,
+                ratioText = RatioText.RATIO_2_1,
+                itemCrop = R.drawable.ic_baseline_crop_landscape_30,
                 name = "2:1"
             )
         )
