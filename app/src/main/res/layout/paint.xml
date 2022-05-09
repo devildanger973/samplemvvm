@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/back_to_main"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/image_edit_back" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/brush_btn"
+            style="@style/option_style">
+
+            <ImageView
+                android:id="@+id/brush_icon"
+                style="@style/icon_style"
+                android:foreground="?selectableItemBackground"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_brush_white_24dp" />
+
+            <TextView
+                style="@style/option_text_style"
+                android:text="Brush" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/eraser_btn"
+            style="@style/option_style">
+
+            <ImageView
+                android:id="@+id/eraser_icon"
+                style="@style/icon_style"
+                android:foreground="?selectableItemBackground"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_eraser_disabled" />
+
+            <TextView
+                style="@style/option_text_style"
+                android:text="Eraser" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/apply_paint"
+        android:foreground="?selectableItemBackground"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_baseline_check_24"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        />
+    <LinearLayout
+        android:id="@+id/settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/settings1"
+            style="@style/setting_icon_style"
+            android:foreground="?selectableItemBackground"
+            android:src="@drawable/ic_settings_3110" />
+    </LinearLayout>
+</RelativeLayout>

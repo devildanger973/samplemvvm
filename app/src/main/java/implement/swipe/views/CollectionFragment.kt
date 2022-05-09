@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import crop.*
 import filter.FilterListFragment
 import io.reactivex.disposables.CompositeDisposable
+import paint.PaintFragment
 
 /**
  *
@@ -44,10 +45,11 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
         myContext = activity
         viewPager = root.findViewById(R.id.pager)
         viewPager.isSaveEnabled = false
+        viewPager.isUserInputEnabled = false
         tabLayout = root.findViewById(R.id.tab_layout)
         collectionAdapter = CollectionAdapter(requireActivity())
         collectionAdapter.addFragment(CropFragment(), "Crop")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Rotate")
+        collectionAdapter.addFragment(PaintFragment(), "Rotate")
         collectionAdapter.addFragment(FilterListFragment(), "Filter")
         collectionAdapter.addFragment(DemoObjectFragment(), "Saturation")
         collectionAdapter.addFragment(DemoObjectFragment(), "Brightness")
@@ -55,28 +57,16 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
         collectionAdapter.addFragment(DemoObjectFragment(), "AddText")
         collectionAdapter.addFragment(DemoObjectFragment(), "Sticker")
         collectionAdapter.addFragment(DemoObjectFragment(), "SupportAction")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Paint")
+        collectionAdapter.addFragment(PaintFragment(), "Paint")
         collectionAdapter.notifyDataSetChanged()
         viewPager.adapter = collectionAdapter
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = collectionAdapter.getPageTitle(position)
-            viewPager.setCurrentItem(tab.position, true)
-
+            viewPager.setCurrentItem(2, false)
         }.attach()
         return root
     }
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        tabLayout = view.findViewById(R.id.tab_layout)
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            demoCollectionAdapter = DemoCollectionAdapter(this)
-            viewPager = view.findViewById(R.id.pager)
-            viewPager.adapter = demoCollectionAdapter
-            tab.text = "OBJECT ${(position + 1)}"
-            viewPager.setCurrentItem(tab.position, true)
-        }.attach()
-    }*/
-//crop
     private val disposable = CompositeDisposable()
 
     override fun onDestroyView() {
@@ -89,15 +79,11 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
 
 
 }
-
-
-
 private const val ARG_OBJECT = "object"
 
 /**
  *
- */// Instances of this class are fragments representing a single
-// object in our collection.
+ */
 class DemoObjectFragment : Fragment() {
 
     /**
@@ -121,9 +107,4 @@ class DemoObjectFragment : Fragment() {
         }
     }
 }
-
-
-/**
- *
- */
 

@@ -5,5 +5,9 @@
     <dimen name="big_padding">16dp</dimen>
     <dimen name="min_height">48dp</dimen>
     <dimen name="activity_margin">48dp</dimen>
+    <dimen name="text_sticker_size">14sp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
 
 </resources>

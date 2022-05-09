@@ -14,6 +14,11 @@
         <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/hero_item.xml" value="0.17074275362318841" />
         <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/hero_item_open_photo.xml" value="0.33" />
         <entry key="..\:/project2/samplemvvm/app/src/main/res/layout/provider_paths.xml" value="0.20416666666666666" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable-v24/ic_brush_grey_24dp.xml" value="0.1" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable-v24/ic_brush_white_24dp.xml" value="0.1475" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable-v24/ic_eraser_disabled.xml" value="0.1475" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable-v24/ic_eraser_enabled.xml" value="0.1" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable-v24/ic_settings_black_24dp.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/border_image.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/circle_button.xml" value="0.2115" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.1475" />
@@ -34,13 +39,16 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/button_sheet.xml" value="0.33" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/collection_demo.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/collection_demo_activity.xml" value="0.19701086956521738" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/color_picker_item_list.xml" value="0.1" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/content_main.xml" value="0.18" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/crop.xml" value="0.33" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/filter.xml" value="0.22" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/filter_item.xml" value="0.33" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_bottom_sheet_dialog.xml" value="0.19701086956521738" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_brush_config.xml" value="0.25" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_collection_object.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_edit_image_crop.xml" value="0.19701086956521738" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_eraser_config.xml" value="0.2384428223844282" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_overview.xml" value="0.17074275362318841" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/grid_view_item.xml" value="0.13072916666666667" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/hero_editor_item.xml" value="0.25" />
@@ -51,6 +59,7 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/item_crop.xml" value="1.5" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/item_selected.xml" value="0.6440677966101694" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/item_selected_add.xml" value="0.67" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/paint.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/recyclerview_item.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/menu/contextual_action_bar.xml" value="0.22" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/menu/top_app_bar.xml" value="0.20416666666666666" />

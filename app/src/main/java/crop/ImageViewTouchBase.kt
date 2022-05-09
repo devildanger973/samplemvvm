@@ -18,6 +18,9 @@ import androidx.appcompat.widget.AppCompatImageView
  * @author alessandro
  */
 abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
+    /**
+     *
+     */
     interface OnDrawableChangeListener {
         /**
          * Callback invoked when a new drawable has been assigned to the view
@@ -27,6 +30,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         fun onDrawableChanged(drawable: Drawable?)
     }
 
+    /**
+     *
+     */
     interface OnLayoutChangeListener {
         /**
          * Callback invoked when the layout bounds changed
@@ -60,12 +66,39 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         FIT_IF_BIGGER
     }
 
+    /**
+     *
+     */
     protected var mEasing: Easing = Cubic()
+
+    /**
+     *
+     */
     protected var mBaseMatrix = Matrix()
+
+    /**
+     *
+     */
     protected var mSuppMatrix = Matrix()
+
+    /**
+     *
+     */
     protected var mNextMatrix: Matrix? = null
+
+    /**
+     *
+     */
     protected var mHandler = Handler()
+
+    /**
+     *
+     */
     protected var mLayoutRunnable: Runnable? = null
+
+    /**
+     *
+     */
     protected var mUserScaled = false
     private var mMaxZoom = ZOOM_INVALID
     private var mMinZoom = ZOOM_INVALID
@@ -73,17 +106,49 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
     // true when min and max zoom are explicitly defined
     private var mMaxZoomDefined = false
     private var mMinZoomDefined = false
+
+    /**
+     *
+     */
     protected val mDisplayMatrix = Matrix()
+
+    /**
+     *
+     */
     protected val mMatrixValues = FloatArray(9)
     private var mThisWidth = -1
     private var mThisHeight = -1
+
+    /**
+     *
+     */
     protected val center = PointF()
+
+    /**
+     *
+     */
     protected var mScaleType = DisplayType.NONE
     private var mScaleTypeChanged = false
     private var mBitmapChanged = false
+
+    /**
+     *
+     */
     protected val DEFAULT_ANIMATION_DURATION = 200
+
+    /**
+     *
+     */
     protected var mBitmapRect = RectF()
+
+    /**
+     *
+     */
     protected var mCenterRect = RectF()
+
+    /**
+     *
+     */
     protected var mScrollRect = RectF()
     private var mDrawableChangeListener: OnDrawableChangeListener? = null
     private var mOnLayoutChangeListener: OnLayoutChangeListener? = null
@@ -98,18 +163,30 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         init()
     }
 
+    /**
+     *
+     */
     fun setOnDrawableChangedListener(listener: OnDrawableChangeListener?) {
         mDrawableChangeListener = listener
     }
 
+    /**
+     *
+     */
     fun setOnLayoutChangeListener(listener: OnLayoutChangeListener?) {
         mOnLayoutChangeListener = listener
     }
 
+    /**
+     *
+     */
     protected open fun init() {
         scaleType = ScaleType.MATRIX
     }
 
+    /**
+     *
+     */
     override fun setScaleType(scaleType: ScaleType) {
         if (scaleType == ScaleType.MATRIX) {
             super.setScaleType(scaleType)
@@ -142,6 +219,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
             }
         }
 
+    /**
+     *
+     */
     override fun onLayout(
         changed: Boolean, left: Int, top: Int, right: Int,
         bottom: Int
@@ -219,7 +299,7 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
                         mSuppMatrix.reset()
                         scale = getDefaultScale(mScaleType)
                     }
-                    setImageMatrix(imageViewMatrix)
+                    setImageMatrix(getImageViewMatrix()!!)
                     if (scale != scale) {
                         zoomTo(scale)
                     }
@@ -228,7 +308,7 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
                     // 2. layout size changed
                     if (!mMinZoomDefined) mMinZoom = ZOOM_INVALID
                     if (!mMaxZoomDefined) mMaxZoom = ZOOM_INVALID
-                    setImageMatrix(imageViewMatrix)
+                    imageMatrix = getImageViewMatrix()!!
                     postTranslate(-deltaX.toFloat(), -deltaY.toFloat())
                     if (!mUserScaled) {
                         scale = getDefaultScale(mScaleType)
@@ -298,6 +378,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         requestLayout()
     }
 
+    /**
+     *
+     */
     protected fun getDefaultScale(type: DisplayType): Float {
         return if (type == DisplayType.FIT_TO_SCREEN) {
             // always fit to screen
@@ -311,6 +394,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         }
     }
 
+    /**
+     *
+     */
     override fun setImageResource(resId: Int) {
         setImageDrawable(context.resources.getDrawable(resId))
     }
@@ -343,6 +429,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         ) else setImageDrawable(null, matrix, min_zoom, max_zoom)
     }
 
+    /**
+     *
+     */
     override fun setImageDrawable(drawable: Drawable?) {
         setImageDrawable(
             drawable,
@@ -386,6 +475,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         _setImageDrawable(drawable, initial_matrix, min_zoom, max_zoom)
     }
 
+    /**
+     *
+     */
     protected open fun _setImageDrawable(
         drawable: Drawable?,
         initial_matrix: Matrix?, min_zoom: Float, max_zoom: Float
@@ -451,6 +543,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         fireOnDrawableChangeListener(drawable)
     }
 
+    /**
+     *
+     */
     protected fun fireOnLayoutChangeListener(
         left: Int, top: Int, right: Int,
         bottom: Int
@@ -463,6 +558,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         }
     }
 
+    /**
+     *
+     */
     protected fun fireOnDrawableChangeListener(drawable: Drawable?) {
         if (null != mDrawableChangeListener) {
             mDrawableChangeListener!!.onDrawableChanged(drawable)
@@ -486,6 +584,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         fireOnLayoutChangeListener(left, top, right, bottom)
     }
 
+    /**
+     *
+     */
     protected fun computeMaxZoom(): Float {
         val drawable = drawable ?: return 1f
         val fw = drawable.intrinsicWidth.toFloat() / mThisWidth.toFloat()
@@ -497,6 +598,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         return scale
     }
 
+    /**
+     *
+     */
     protected fun computeMinZoom(): Float {
         val drawable = drawable ?: return 1f
         var scale = getScale(mBaseMatrix)
@@ -550,15 +654,23 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
      *
      * @return
      */
-    val imageViewMatrix: Matrix
-        get() = getImageViewMatrix(mSuppMatrix)
+    open fun getImageViewMatrix(): Matrix? {
+        return getImageViewMatrix(mSuppMatrix)
+    }
 
-    fun getImageViewMatrix(supportMatrix: Matrix?): Matrix {
+    /**
+     *
+     */
+    @JvmName("getImageViewMatrix1")
+    fun getImageViewMatrix(supportMatrix: Matrix): Matrix {
         mDisplayMatrix.set(mBaseMatrix)
         mDisplayMatrix.postConcat(supportMatrix)
         return mDisplayMatrix
     }
 
+    /**
+     *
+     */
     override fun setImageMatrix(matrix: Matrix) {
         val current = imageMatrix
         var needUpdate = false
@@ -659,11 +771,17 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         )
     }
 
+    /**
+     *
+     */
     protected fun getValue(matrix: Matrix, whichValue: Int): Float {
         matrix.getValues(mMatrixValues)
         return mMatrixValues[whichValue]
     }
 
+    /**
+     *
+     */
     fun printMatrix(matrix: Matrix) {
         val scalex = getValue(matrix, Matrix.MSCALE_X)
         val scaley = getValue(matrix, Matrix.MSCALE_Y)
@@ -675,21 +793,33 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         )
     }
 
+    /**
+     *
+     */
     val bitmapRect: RectF?
         get() = getBitmapRect(mSuppMatrix)
 
+    /**
+     *
+     */
     protected fun getBitmapRect(supportMatrix: Matrix?): RectF? {
         val drawable = drawable ?: return null
-        val m = getImageViewMatrix(supportMatrix)
+        val m = getImageViewMatrix()
         mBitmapRect[0f, 0f, drawable.intrinsicWidth.toFloat()] = drawable.intrinsicHeight.toFloat()
-        m.mapRect(mBitmapRect)
+        m?.mapRect(mBitmapRect)
         return mBitmapRect
     }
 
+    /**
+     *
+     */
     protected fun getScale(matrix: Matrix): Float {
         return getValue(matrix, Matrix.MSCALE_X)
     }
 
+    /**
+     *
+     */
     @SuppressLint("Override")
     override fun getRotation(): Float {
         return 0F
@@ -703,6 +833,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
     val scale: Float
         get() = getScale(mSuppMatrix)
 
+    /**
+     *
+     */
     protected fun center(horizontal: Boolean, vertical: Boolean) {
         val drawable = drawable ?: return
         val rect = getCenter(mSuppMatrix, horizontal, vertical)
@@ -714,6 +847,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         }
     }
 
+    /**
+     *
+     */
     protected fun getCenter(
         supportMatrix: Matrix?, horizontal: Boolean,
         vertical: Boolean
@@ -749,16 +885,22 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         return mCenterRect
     }
 
+    /**
+     *
+     */
     protected fun postTranslate(deltaX: Float, deltaY: Float) {
         if (deltaX != 0f || deltaY != 0f) {
             if (LOG_ENABLED) {
                 Log.i(LOG_TAG, "postTranslate: " + deltaX + "x" + deltaY)
             }
             mSuppMatrix.postTranslate(deltaX, deltaY)
-            setImageMatrix(imageViewMatrix)
+            imageMatrix = getImageViewMatrix()!!
         }
     }
 
+    /**
+     *
+     */
     protected fun postScale(scale: Float, centerX: Float, centerY: Float) {
         if (LOG_ENABLED) {
             Log.i(
@@ -767,9 +909,12 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
             )
         }
         mSuppMatrix.postScale(scale, scale, centerX, centerY)
-        setImageMatrix(imageViewMatrix)
+        imageMatrix = getImageViewMatrix()!!
     }
 
+    /**
+     *
+     */
     protected fun zoomTo(scale: Float) {
         var scale = scale
         if (scale > maxScale) scale = maxScale
@@ -791,6 +936,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         zoomTo(scale, center.x, center.y, durationMs)
     }
 
+    /**
+     *
+     */
     protected fun zoomTo(scale: Float, centerX: Float, centerY: Float) {
         var scale = scale
         if (scale > maxScale) scale = maxScale
@@ -801,7 +949,14 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         center(true, true)
     }
 
+    /**
+     *
+     */
     protected fun onZoom(scale: Float) {}
+
+    /**
+     *
+     */
     protected open fun onZoomAnimationCompleted(scale: Float) {}
 
     /**
@@ -814,6 +969,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         panBy(x.toDouble(), y.toDouble())
     }
 
+    /**
+     *
+     */
     protected fun panBy(dx: Double, dy: Double) {
         val rect = bitmapRect
         mScrollRect[dx.toFloat(), dy.toFloat(), 0f] = 0f
@@ -822,6 +980,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         center(true, true)
     }
 
+    /**
+     *
+     */
     protected fun updateRect(bitmapRect: RectF?, scrollRect: RectF) {
         if (bitmapRect == null) return
         if (bitmapRect.top >= 0 && bitmapRect.bottom <= mThisHeight) scrollRect.top = 0f
@@ -838,6 +999,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
             (mThisWidth - 0 - bitmapRect.right)
     }
 
+    /**
+     *
+     */
     protected fun scrollBy(
         distanceX: Float, distanceY: Float,
         durationMs: Double
@@ -869,6 +1033,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         })
     }
 
+    /**
+     *
+     */
     protected fun zoomTo(
         scale: Float, centerX: Float, centerY: Float,
         durationMs: Float
@@ -890,7 +1057,7 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
                 val newScale = mEasing.easeInOut(
                     currentMs.toDouble(), 0.0,
                     deltaScale.toDouble(), durationMs.toDouble()
-                ) as Float
+                ).toFloat()
                 zoomTo(oldScale + newScale, destX, destY)
                 if (currentMs < durationMs) {
                     mHandler.post(this)
@@ -902,6 +1069,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
         })
     }
 
+    /**
+     *
+     */
     override fun dispose() {
         clear()
     }

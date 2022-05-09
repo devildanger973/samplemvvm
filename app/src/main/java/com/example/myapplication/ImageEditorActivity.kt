@@ -43,6 +43,7 @@ import crop.OnLoadingDialogListener
 import crop.rotate.RotateImageView
 import filter.FilterListFragment
 import implement.swipe.views.CollectionFragment
+import paint.CustomPaintView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -64,6 +65,17 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     private lateinit var listHeroSelected: MutableList<HeroSelected>
     private lateinit var share: ImageButton
     private lateinit var progressBar: ProgressBar
+    val MODE_NONE = 0
+    val MODE_STICKERS = 1
+    val MODE_FILTER = 2
+    val MODE_CROP = 3
+    val MODE_ROTATE = 4
+    val MODE_TEXT = 5
+    val MODE_PAINT = 6
+    val MODE_BEAUTY = 7
+    val MODE_BRIGHTNESS = 8
+    val MODE_SATURATION = 9
+    var mode: Int = MODE_NONE
 
     /**
      *
@@ -99,6 +111,8 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     fun getMainBit(): Bitmap? {
         return bitMap
     }
+//paint
+    var paintView: CustomPaintView? = null
 
     /**
      *
@@ -110,9 +124,9 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         mPhotograph = findViewById(R.id.image_view)
         listHeroSelected = mutableListOf()
         list = intent.getStringArrayListExtra("LIST")
-        bitMap = BitmapFactory.decodeFile(filePath)
 
         if (filePath != null) {
+            bitMap = BitmapFactory.decodeFile(filePath)
             val uri: Uri = Uri.parse(filePath)
             mPhotograph?.setImageURI(uri)
             isMultiple = false
@@ -135,6 +149,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
             } else {
                 Log.d("QQQQQ", "")
             }
+            bitMap = BitmapFactory.decodeFile((list ?: return).first())
         }
         Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
         var bitMap: Bitmap
@@ -242,6 +257,9 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
 //rotate
         rotatePanelEdited = findViewById(R.id.rotate_panel)
         filterListFragment = FilterListFragment.newInstance()
+//paint
+        paintView = findViewById(R.id.custom_paint_view)
+
 
     }
 
@@ -253,6 +271,8 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 //increaseOpTimes()
             }
             bitMap = newBit
+            rotatePanelEdited?.setImageBitmap(getMainBit())
+            cropPanelEdited?.setImageBitmap(getMainBit())
             mPhotograph?.setImageBitmap(bitMap)
             mPhotograph?.displayType
             /*if (mode == ImageEditorActivity.MODE_TEXT) {

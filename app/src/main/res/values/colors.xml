@@ -10,5 +10,6 @@
 <!--    Room - Database-->
     <color name="buttonLabel">#FFFFFF</color>
     <color name="text_color_gray_3">#A6A5A5</color>
+    <color name="text_color">#BEC2C4</color>
 
 </resources>
