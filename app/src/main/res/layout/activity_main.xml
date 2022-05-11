@@ -22,13 +22,12 @@
         android:id="@+id/checkAll"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
-        android:foreground="?selectableItemBackground"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/icon_check"
-        app:layout_constraintEnd_toEndOf="@+id/image"
-        app:layout_constraintTop_toTopOf="@+id/image"
+        android:foreground="?selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@+id/image"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerHero"

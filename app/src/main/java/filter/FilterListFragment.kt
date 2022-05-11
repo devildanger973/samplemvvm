@@ -1,18 +1,15 @@
 package filter
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import crop.BaseEditFragment
-import crop.ImageViewTouch
 import crop.OnLoadingDialogListener
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,7 +22,6 @@ import io.reactivex.schedulers.Schedulers
  */
 class FilterListFragment : BaseEditFragment() {
 
-
     companion object {
         fun newInstance(): FilterListFragment? {
             return FilterListFragment()
@@ -33,19 +29,16 @@ class FilterListFragment : BaseEditFragment() {
     }
 
     override fun backToMain() {
-        currentBitmap = ensureEditActivity()?.getMainBit()
+        activity?.mode = ensureEditActivity()!!.MODE_NONE
+        currentBitmap = activity?.getMainBit()
         filterBitmap = null
-        mPhotograph1?.setImageBitmap(ensureEditActivity()?.getMainBit())
-        mPhotograph1?.setScaleEnabled(true)
+        ensureEditActivity()?.mPhotograph?.setImageBitmap(ensureEditActivity()?.getMainBit())
+        ensureEditActivity()?.mPhotograph?.setScaleEnabled(true)
     }
 
     private lateinit var mFilterAdapter: FilterAdapter
 
-    private var filePath1: String? = null
-    private var bitMap: Bitmap? = null
     private lateinit var root: View
-    private var mPhotograph1: ImageViewTouch? = null
-    private var list1: ArrayList<String>? = null
     val NULL_FILTER_INDEX = 0
     private var currentBitmap: Bitmap? = null
     private var loadingDialogListener: OnLoadingDialogListener? = null
@@ -58,21 +51,33 @@ class FilterListFragment : BaseEditFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         root = inflater.inflate(R.layout.filter, container, false)
         val filterRecyclerView: RecyclerView = root.findViewById(R.id.filter_recycler)
-
+        val btnApply: ImageView = root.findViewById(R.id.apply1)
         mFilterAdapter = FilterAdapter(this, requireContext())
-        mPhotograph1 = ensureEditActivity()?.mPhotograph
-        filePath1 = ensureEditActivity()?.filePath
-        //viewImage()
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        filterRecyclerView.layoutManager = layoutManager
         filterRecyclerView.adapter = mFilterAdapter
         val backBtn: View = root.findViewById(R.id.back_to_main)
         backBtn.setOnClickListener { backToMain() }
+        btnApply.setOnClickListener { applyFilterImage() }
         return root
+    }
+
+    fun applyFilterImage() {
+        if (currentBitmap == activity?.getMainBit()) {
+            backToMain()
+        } else {
+            activity?.changeMainBitmap(filterBitmap, true)
+            backToMain()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isVisible) {
+            viewImage()
+        }
     }
 
     /**
@@ -80,7 +85,7 @@ class FilterListFragment : BaseEditFragment() {
      */
     fun enableFilter(filterIndex: Int) {
         if (filterIndex == NULL_FILTER_INDEX) {
-            mPhotograph1?.setImageBitmap(ensureEditActivity()?.getMainBit())
+            ensureEditActivity()?.mPhotograph?.setImageBitmap(ensureEditActivity()?.getMainBit())
             currentBitmap = ensureEditActivity()?.getMainBit()
             return
         }
@@ -98,9 +103,6 @@ class FilterListFragment : BaseEditFragment() {
                 { showSaveErrorToast() }
             )
         compositeDisposable.add(applyFilterDisposable)
-        /*Handler().post{
-            applyFilter(filterIndex)
-        }*/
     }
 
     private fun setCurrentBitmap(currentBitmap: Bitmap?) {
@@ -121,17 +123,11 @@ class FilterListFragment : BaseEditFragment() {
             filterBitmap?.recycle()
         }
         filterBitmap = bitmapWithFilter
-        mPhotograph1?.setImageBitmap(filterBitmap)
+        ensureEditActivity()?.mPhotograph?.setImageBitmap(filterBitmap)
         currentBitmap = filterBitmap
     }
 
     private fun applyFilter(filterIndex: Int): Single<Bitmap?> {
-        /*val srcBitmap: Bitmap = Bitmap.createBitmap(
-            ensureEditActivity()?.getMainBit()!!.copy(
-                Bitmap.Config.RGB_565, true
-            )
-        )
-        PhotoProcessing.filterPhoto(srcBitmap, filterIndex)*/
         return Single.fromCallable {
             val srcBitmap: Bitmap = Bitmap.createBitmap(
                 ensureEditActivity()?.getMainBit()!!.copy(
@@ -143,44 +139,37 @@ class FilterListFragment : BaseEditFragment() {
     }
 
     override fun onShow() {
+        /*activity?.mode = ensureEditActivity()!!.MODE_FILTER
+        ensureEditActivity()?.mPhotograph?.visibility = View.VISIBLE
         ensureEditActivity()?.filterListFragment?.setCurrentBitmap(ensureEditActivity()?.getMainBit())
         if (ensureEditActivity()?.filePath != null) {
-            mPhotograph1?.setImageBitmap(ensureEditActivity()?.getMainBit())
-            mPhotograph1?.displayType
-            mPhotograph1?.visibility = View.VISIBLE
-
+            bitMap = BitmapFactory.decodeFile(ensureEditActivity()?.filePath)
+            ensureEditActivity()?.mPhotograph?.setImageBitmap(bitMap)
+            ensureEditActivity()?.mPhotograph?.displayType
         } else if (ensureEditActivity()?.list != null) {
-            list1 = ensureEditActivity()?.list
-            for (item in list1 ?: return) {
-                val fileList = (list1 ?: return).first()
+            for (item in ensureEditActivity()?.list ?: return) {
+                val fileList = (ensureEditActivity()?.list ?: return).first()
                 bitMap = BitmapFactory.decodeFile(fileList)
-                mPhotograph1?.setImageBitmap(bitMap)
-                mPhotograph1?.displayType
-                mPhotograph1?.visibility = View.VISIBLE
-
+                ensureEditActivity()?.mPhotograph?.setImageBitmap(ensureEditActivity()?.getMainBit())
+                ensureEditActivity()?.mPhotograph?.displayType
             }
         }
-        mPhotograph1?.setScaleEnabled(false)
+        ensureEditActivity()?.mPhotograph?.setScaleEnabled(false)*/
     }
 
-    private fun viewImage() {
-        mPhotograph1?.visibility = View.VISIBLE
-        ensureEditActivity()?.filterListFragment?.setCurrentBitmap(ensureEditActivity()?.getMainBit())
-        /*if (ensureEditActivity()?.filePath != null) {
-            filePath1 = ensureEditActivity()?.filePath
-            bitMap = BitmapFactory.decodeFile(filePath1)
-            mPhotograph1?.setImageBitmap(bitMap)
-            mPhotograph1?.displayType
-        } else if (ensureEditActivity()?.list != null) {
-            list1 = ensureEditActivity()?.list
-            for (item in list1 ?: return) {
-                val fileList = (list1 ?: return).first()
-                bitMap = BitmapFactory.decodeFile(fileList)
-                mPhotograph1?.setImageBitmap(bitMap)
-                mPhotograph1?.displayType
+    fun viewImage() {
+        activity?.mPhotograph?.visibility = View.VISIBLE
+        activity?.filterListFragment?.setCurrentBitmap(activity?.getMainBit())
+        if (activity?.filePath != null) {
+            activity?.mPhotograph?.setImageBitmap(activity?.getMainBit())
+            activity?.mPhotograph?.displayType
+        } else if (activity?.list != null) {
+            for (item in activity?.list ?: return) {
+                activity?.mPhotograph?.setImageBitmap(activity?.getMainBit())
+                activity?.mPhotograph?.displayType
             }
         }
-        mPhotograph1?.setScaleEnabled(false)*/
+        activity?.mPhotograph?.setScaleEnabled(false)
 
     }
 

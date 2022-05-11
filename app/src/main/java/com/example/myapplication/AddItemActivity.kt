@@ -1,31 +1,17 @@
 package com.example.myapplication
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_ONE
-import com.example.myapplication.HeroAdapter.Companion.VIEW_TYPE_TWO
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.messaging.FirebaseMessaging
-import java.io.File
-import java.io.FileOutputStream
 
 
 /**

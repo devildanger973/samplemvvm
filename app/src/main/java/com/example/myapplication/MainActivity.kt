@@ -44,8 +44,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mHeroAdapter: HeroAdapter
     private lateinit var mImageListAdapter: ImageListAdapter
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-//crop
-private var loadingDialog: Dialog? = null
+
+    //crop
+    private var loadingDialog: Dialog? = null
 
     /**
      *
@@ -188,20 +189,28 @@ private var loadingDialog: Dialog? = null
             }
             mHeroAdapter.setList(mHeros)
         }
+        var show = false
         btEdited.setOnClickListener {
             mRecyclerHero.adapter = mImageListAdapter
-
+            show = true
         }
         btGallery.setOnClickListener {
-            mRecyclerHero.adapter = mHeroAdapter
-            val modalBottomSheet = ModalBottomSheet() { folder ->
-                folderList(folder.folderPath)
+            if (show) {
+                mHeros.clear()
+                listAllImage()
                 mHeroAdapter.setList(mHeros)
-                Log.d("FOLDER_PATH", "$mHeros")
-
+                mRecyclerHero.adapter = mHeroAdapter
+                show = false
+            } else {
+                mHeros.clear()
+                val modalBottomSheet = ModalBottomSheet() { folder ->
+                    folderList(folder.folderPath)
+                    mRecyclerHero.adapter = mHeroAdapter
+                    mHeroAdapter.setList(mHeros)
+                    Log.d("FOLDER_PATH1", "${folder.folderPath}")
+                }
+                modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
             }
-            modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
-
         }
 
     }
@@ -213,7 +222,7 @@ private var loadingDialog: Dialog? = null
         )
         val selectionFolder = MediaStore.Images.Media.DATA + " like ? "
         //val f = folderPath.replace("/","//")
-        val selectionargs = arrayOf("%$folderPath%")
+        val selectionargs = arrayOf("$folderPath%")
         val cursorFolder = this.contentResolver.query(
             queryUri,
             projection,
@@ -300,6 +309,8 @@ private var loadingDialog: Dialog? = null
             val path = intent.getStringExtra("FILE_PATH")
             myIntent.putExtra("FILE_PATH", path)
             this.startActivity(myIntent)
+            Log.d("check22222", " android > Q $path")
+
         }
     }
 

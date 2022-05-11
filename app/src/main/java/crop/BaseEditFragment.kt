@@ -4,9 +4,19 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.myapplication.ImageEditorActivity
 
+/**
+ *
+ */
 abstract class BaseEditFragment : Fragment() {
+    /**
+     *
+     */
     protected var activity: ImageEditorActivity? = null
 
+
+    /**
+     *
+     */
     fun ensureEditActivity(): ImageEditorActivity? {
         if (activity == null) {
             activity = getActivity() as ImageEditorActivity?

@@ -46,8 +46,8 @@ class BrushConfigDialog : BottomSheetDialogFragment(), OnSeekBarChangeListener {
             ColorPickerAdapter(requireActivity(), object : ColorPickerAdapter.OnItemClickListener {
                 override fun onItemClick(item: Int) {
                     if (mProperties != null) {
-                        dismiss()
-                        mProperties!!.onColorChanged(item)
+                        //dismiss()
+                        (mProperties ?: return).onColorChanged(item)
                     }
                 }
             })

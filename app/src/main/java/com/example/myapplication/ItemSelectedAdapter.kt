@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 
-import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -35,8 +34,6 @@ class ItemSelectedAdapter(
     }
 
     private var mHeroSelected = mutableListOf<HeroSelected>()
-    private var mHero = mutableListOf<Hero>()
-
 
     /**
      *
@@ -60,13 +57,7 @@ class ItemSelectedAdapter(
         /**
          *
          */
-        val mTextName: TextView = itemView.findViewById(R.id.text_name1)
-
-        /**
-         *
-         */
         fun bind(item: HeroSelected, position: Int) {
-            mTextName.visibility = View.GONE
             mImageSelected.setOnClickListener {
                 listener.onItemClick(item)
                 if (currentPos != -1) {
@@ -116,18 +107,13 @@ class ItemSelectedAdapter(
         /**
          *
          */
-        val mImageHero1: ImageView = itemView.findViewById(R.id.image_editor_hero1)
-
-        /**
-         *
-         */
-        val mTextName1: TextView = itemView.findViewById(R.id.text_name_editor1)
+        val mImageSelected1: ImageView = itemView.findViewById(R.id.itemSelectedAdd)
 
         /**
          *
          */
         fun bind() {
-            mImageHero1.setOnClickListener {
+            mImageSelected1.setOnClickListener {
                 listener.onOpenFolderClick()
             }
         }
@@ -153,7 +139,7 @@ class ItemSelectedAdapter(
             return ViewHolder(heroView)
         }
         val inflater = LayoutInflater.from(mContext)
-        val heroView = inflater.inflate(R.layout.hero_editor_item_open_photo, parent, false)
+        val heroView = inflater.inflate(R.layout.item_selected_add, parent, false)
         return ViewHolder2(heroView)
     }
 
@@ -179,18 +165,18 @@ class ItemSelectedAdapter(
                         Glide.with(mContext).load(hero.imagePath)
                             .into((holder as ViewHolder).mImageSelected)
                 }
-                (holder as ViewHolder).mTextName.text
+                (holder as ViewHolder)
                 holder.bind(item = hero, position)
             }
             VIEW_TYPE_TWO2 -> {
                 if (hero.image != -1)
-                    Glide.with(mContext).load(hero.image).into((holder as ViewHolder2).mImageHero1)
+                    Glide.with(mContext).load(hero.image).into((holder as ViewHolder2).mImageSelected1)
                 else {
                     if (hero.imagePath != null)
                         Glide.with(mContext).load(hero.imagePath)
-                            .into((holder as ViewHolder2).mImageHero1)
+                            .into((holder as ViewHolder2).mImageSelected1)
                 }
-                (holder as ViewHolder2).mTextName1.text
+                (holder as ViewHolder2)
                 holder.bind()
             }
         }

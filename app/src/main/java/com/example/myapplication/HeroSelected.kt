@@ -5,6 +5,9 @@ package com.example.myapplication
  */
 data class HeroSelected(
 
+    /**
+     *
+     */
     var imagePath: String? = null,
     /**
      *
@@ -14,6 +17,9 @@ data class HeroSelected(
      *
      */
     var isSelected: Boolean = false,
+    /**
+     *
+     */
     val image: Int = -1
 )
 

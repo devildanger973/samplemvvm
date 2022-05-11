@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/crop">
     <ImageView
+        android:foreground="?selectableItemBackground"
         android:background="@color/black"
         android:id="@+id/itemCrop"
         android:layout_width="40dp"

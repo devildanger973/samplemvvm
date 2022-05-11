@@ -126,6 +126,7 @@
         android:orientation="vertical"
         android:id="@+id/root"
         >
+
     </LinearLayout>
 
     <FrameLayout
@@ -139,29 +140,28 @@
         android:background="#424242">
         <crop.ImageViewTouch
             android:id="@+id/image_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
-            tools:visibility="visible"
             />
         <paint.CustomPaintView
             android:id="@+id/custom_paint_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:visibility="gone" />
         <crop.rotate.RotateImageView
             android:id="@+id/rotate_panel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:visibility="visible" />
+            android:visibility="gone" />
         <com.theartofdev.edmodo.cropper.CropImageView
             android:id="@+id/crop_panel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView

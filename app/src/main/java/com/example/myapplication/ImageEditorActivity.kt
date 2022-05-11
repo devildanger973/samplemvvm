@@ -38,12 +38,15 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
+import crop.CropFragment
 import crop.ImageViewTouch
 import crop.OnLoadingDialogListener
+import crop.OnMainBitmapChangeListener
 import crop.rotate.RotateImageView
 import filter.FilterListFragment
 import implement.swipe.views.CollectionFragment
 import paint.CustomPaintView
+import paint.PaintFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -76,6 +79,10 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     val MODE_BRIGHTNESS = 8
     val MODE_SATURATION = 9
     var mode: Int = MODE_NONE
+    private val onMainBitmapChangeListener: OnMainBitmapChangeListener? = null
+    protected var isBeenSaved = false
+    protected var numberOfOperations = 0
+
 
     /**
      *
@@ -96,7 +103,11 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
      *
      */
 //crop
-    var cropPanelEdited: CropImageView? = null
+    private var cropPanelEdited: CropImageView? = null
+
+    /**
+     *
+     */
 
     /**
      *
@@ -111,8 +122,13 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     fun getMainBit(): Bitmap? {
         return bitMap
     }
-//paint
+
+    //paint
     var paintView: CustomPaintView? = null
+
+    public fun getCrop(): CropImageView? {
+        return cropPanelEdited
+    }
 
     /**
      *
@@ -152,7 +168,6 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
             bitMap = BitmapFactory.decodeFile((list ?: return).first())
         }
         Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
-        var bitMap: Bitmap
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
         mItemSelectedAdapter =
             ItemSelectedAdapter(this, object : ItemSelectedAdapter.OnItemClickListener {
@@ -259,8 +274,6 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         filterListFragment = FilterListFragment.newInstance()
 //paint
         paintView = findViewById(R.id.custom_paint_view)
-
-
     }
 
     fun changeMainBitmap(newBit: Bitmap?, needPushUndoStack: Boolean) {
@@ -271,13 +284,11 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 //increaseOpTimes()
             }
             bitMap = newBit
-            rotatePanelEdited?.setImageBitmap(getMainBit())
-            cropPanelEdited?.setImageBitmap(getMainBit())
             mPhotograph?.setImageBitmap(bitMap)
             mPhotograph?.displayType
-            /*if (mode == ImageEditorActivity.MODE_TEXT) {
-                onMainBitmapChangeListener.onMainBitmapChange()
-            }*/
+            if (mode == MODE_TEXT) {
+                onMainBitmapChangeListener?.onMainBitmapChange()
+            }
         }
     }
 

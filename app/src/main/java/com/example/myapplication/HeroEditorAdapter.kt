@@ -24,12 +24,12 @@ class HeroEditorAdapter(private val mContext: Context, private val listener: OnI
         /**
          *
          */
-        const val VIEW_TYPE_ONE = 1
+        const val VIEW_TYPE_ONE: Int = 1
 
         /**
          *
          */
-        const val VIEW_TYPE_TWO = 2
+        const val VIEW_TYPE_TWO: Int = 2
     }
 
     private var mHero = mutableListOf<Hero>()
@@ -37,7 +37,7 @@ class HeroEditorAdapter(private val mContext: Context, private val listener: OnI
     /**
      *
      */
-    var currentPos = -1
+    var currentPos: Int = -1
 
     /**
      *
@@ -102,7 +102,7 @@ class HeroEditorAdapter(private val mContext: Context, private val listener: OnI
 
             }
             if (item.isSelected) {
-                Log.d("DDDDD", "binding item.isSelected "+item.isSelected)
+                Log.d("DDDDD", "binding item.isSelected " + item.isSelected)
                 mImageBorder.visibility = View.VISIBLE
                 mImageHeart.visibility = View.VISIBLE
                 mBorderHeart.visibility = View.VISIBLE

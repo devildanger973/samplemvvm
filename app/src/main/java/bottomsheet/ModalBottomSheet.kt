@@ -42,7 +42,7 @@ class ModalBottomSheet(private val onAnItemClick: (FolderData) -> Unit) : Bottom
             FolderDataAdapter(requireActivity(), object : FolderDataAdapter.OnItemClickListener {
                 override fun onItemClick(item: FolderData?) {
                     //folderList(item!!.folderPath)
-                    onAnItemClick.invoke(item!!)
+                    onAnItemClick.invoke(item ?: return)
                     dismiss()
                     /*Log.d("FOLDER_PATH", "$mArr")*/
                 }

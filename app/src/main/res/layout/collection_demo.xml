@@ -17,8 +17,6 @@
         android:layout_height="wrap_content"
         app:tabMode="scrollable"
         tools:listitem="@layout/fragment_collection_object"/>
-
-
 </LinearLayout>
 
 

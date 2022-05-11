@@ -15,8 +15,8 @@ class ColorPickerAdapter(
     private val listener: OnItemClickListener
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
-    private val inflater: LayoutInflater
-    private val colorPickerColors: List<Int>
+    private val inflater: LayoutInflater = LayoutInflater.from(mContext)
+    private val colorPickerColors: MutableList<Int>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = inflater.inflate(R.layout.color_picker_item_list, parent, false)
         return ViewHolder(view)
@@ -30,7 +30,7 @@ class ColorPickerAdapter(
         /**
          *
          */
-        var colorPickerView: View = itemView.findViewById(R.id.color_picker_view)
+        var colorPickerView: ImageView = itemView.findViewById(R.id.color_picker_view)
         fun bind(item: Int, position: Int) {
             listener.onItemClick(item)
         }
@@ -50,19 +50,24 @@ class ColorPickerAdapter(
     }
 
     init {
-        inflater = LayoutInflater.from(mContext)
-        colorPickerColors = getKelly22Colors(mContext)
+        colorPickerColors = getKelly22Colors(mContext).toMutableList()
     }
 
+    /**
+     *
+     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val color = colorPickerColors[position]
         Glide.with(mContext).load(color)
-            .into((holder as ColorPickerAdapter.ViewHolder).colorPickerView as ImageView)
+            .into((holder as ColorPickerAdapter.ViewHolder).colorPickerView)
         holder.colorPickerView.setBackgroundColor(colorPickerColors[position])
         holder.bind(item = color, position)
 
     }
 
+    /**
+     *
+     */
     interface OnItemClickListener {
         /**
          *
