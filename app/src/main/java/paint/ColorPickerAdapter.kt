@@ -1,5 +1,6 @@
 package paint
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.myapplication.ItemSelectedAdapter
 import com.example.myapplication.R
 
 class ColorPickerAdapter(
@@ -31,7 +31,7 @@ class ColorPickerAdapter(
          *
          */
         var colorPickerView: ImageView = itemView.findViewById(R.id.color_picker_view)
-        fun bind(item: Int, position: Int) {
+        fun bind(item: Int) {
             listener.onItemClick(item)
         }
 
@@ -61,7 +61,7 @@ class ColorPickerAdapter(
         Glide.with(mContext).load(color)
             .into((holder as ColorPickerAdapter.ViewHolder).colorPickerView)
         holder.colorPickerView.setBackgroundColor(colorPickerColors[position])
-        holder.bind(item = color, position)
+        holder.bind(item = color)
 
     }
 

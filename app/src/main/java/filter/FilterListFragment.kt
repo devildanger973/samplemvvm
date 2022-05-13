@@ -130,7 +130,7 @@ class FilterListFragment : BaseEditFragment() {
     private fun applyFilter(filterIndex: Int): Single<Bitmap?> {
         return Single.fromCallable {
             val srcBitmap: Bitmap = Bitmap.createBitmap(
-                ensureEditActivity()?.getMainBit()!!.copy(
+                activity?.getMainBit()!!.copy(
                     Bitmap.Config.RGB_565, true
                 )
             )

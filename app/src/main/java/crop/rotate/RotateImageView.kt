@@ -3,7 +3,6 @@ package crop.rotate
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.View
 import android.widget.ImageView
 
 class RotateImageView : ImageView {
@@ -11,7 +10,7 @@ class RotateImageView : ImageView {
     private var dstRect: RectF? = null
     private var maxRect: Rect? = null
     private var bitmap: Bitmap? = null
-    internal val matrix: Matrix = Matrix()
+    internal val matrix = Matrix()
 
     /**
      *
@@ -108,14 +107,13 @@ class RotateImageView : ImageView {
     /**
      *
      */
-    val imageNewRect: RectF?
-        get() {
-            val m = Matrix()
-            m.postRotate(
-                rotateAngle.toFloat(), originImageRect!!.centerX(),
-                originImageRect!!.centerY()
-            )
-            m.mapRect(originImageRect)
-            return originImageRect
-        }
+    open fun getImageNewRect(bit: Bitmap?): RectF? {
+        val m = Matrix()
+        originImageRect!![0f, 0f, bit?.width!!.toFloat()] = bit.height.toFloat()
+
+        m.postRotate(rotateAngle, originImageRect!!.centerX(),
+            originImageRect!!.centerY())
+        m.mapRect(originImageRect)
+        return originImageRect
+    }
 }

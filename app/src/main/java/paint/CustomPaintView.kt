@@ -3,6 +3,8 @@ package paint
 import android.content.Context
 import android.graphics.*
 import android.os.Build
+import android.graphics.Color
+
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -18,8 +20,6 @@ class CustomPaintView : View {
     private var last_y = 0f
     private var isEraser = false
     private var mColor = 0
-
-    private val mDrawBit: Bitmap? = null
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -139,7 +139,7 @@ class CustomPaintView : View {
 
     @JvmName("getPaintBit1")
     fun getPaintBit(): Bitmap? {
-        return mDrawBit
+        return paintBit
     }
 
     fun reset() {

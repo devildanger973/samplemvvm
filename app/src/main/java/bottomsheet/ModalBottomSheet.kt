@@ -20,7 +20,8 @@ import java.io.File
 /**
  *
  */
-class ModalBottomSheet(private val onAnItemClick: (FolderData) -> Unit) : BottomSheetDialogFragment() {
+class ModalBottomSheet(private val onAnItemClick: (FolderData) -> Unit) :
+    BottomSheetDialogFragment() {
     private lateinit var mHeros: MutableList<Hero>
 
     private lateinit var mFolderData: MutableList<FolderData>
@@ -33,7 +34,7 @@ class ModalBottomSheet(private val onAnItemClick: (FolderData) -> Unit) : Bottom
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val root = inflater.inflate(R.layout.content_main, container, false)
         mHeros = mutableListOf()

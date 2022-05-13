@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -76,9 +77,7 @@ class MainActivity : AppCompatActivity() {
         mImageData = mutableListOf()
         val gridLayoutManager = GridLayoutManager(applicationContext, 3)
         val checkBoxAll: ImageView = findViewById(R.id.checkAll)
-
         var check = 1
-
         val count1 = 0
         val topAppBar: Toolbar = findViewById(R.id.image)
         mHeroAdapter = HeroAdapter(this, object : HeroAdapter.OnItemClickListener {
@@ -98,9 +97,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSelected(array: List<String>) {
                 arr = array.toMutableList()
-
             }
-
         })
 
         topAppBar.setNavigationOnClickListener {
@@ -113,6 +110,10 @@ class MainActivity : AppCompatActivity() {
             check = 1
         }
 
+        val btGallery: Button = findViewById(R.id.gallery)
+        val btEdited: Button = findViewById(R.id.edited)
+        val btEditedHide: Button = findViewById(R.id.editedHide)
+
         checkBoxAll.setOnClickListener {
             topAppBar.title = ""
             if (check == 1) {
@@ -121,6 +122,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d("checkDDDD", "${true}")
                 topAppBar.navigationIcon =
                     getDrawable(androidx.navigation.ui.R.drawable.ic_mtrl_chip_close_circle)
+                btEditedHide.visibility = View.VISIBLE
+                btEdited.visibility = View.GONE
                 check = 2
             } else {
                 if (arr.size == 0) {
@@ -130,7 +133,8 @@ class MainActivity : AppCompatActivity() {
                     Log.d("checkDDDD", "${false}")
                     check = 1
                     arr.clear()
-
+                    btEdited.visibility = View.VISIBLE
+                    btEditedHide.visibility = View.GONE
                 } else {
                     startImageList(arr)
                     mHeroAdapter.setShowCheckBox(false)
@@ -138,7 +142,8 @@ class MainActivity : AppCompatActivity() {
                         getDrawable(R.drawable.ic_settings_3110)
                     check = 1
                     arr.clear()
-
+                    btEdited.visibility = View.VISIBLE
+                    btEditedHide.visibility = View.GONE
                 }
             }
         }
@@ -167,8 +172,6 @@ class MainActivity : AppCompatActivity() {
 
         //Room - Database
         mImageData = mutableListOf()
-        val btGallery: Button = findViewById(R.id.gallery)
-        val btEdited: Button = findViewById(R.id.edited)
         mImageListAdapter = ImageListAdapter(this, object : ImageListAdapter.OnItemClickListener {
             override fun onItemClick(item: ImageData) {
                 startImageEditor(imagePath = item.imagePath1)
@@ -278,7 +281,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     /**
      *
      */
@@ -288,10 +290,8 @@ class MainActivity : AppCompatActivity() {
                 Log.w("TAG", "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
-
             // Get new FCM registration token
             val token = task.result
-
             // Log and toast
             val msg = getString(R.string.msg_token_fmt, token)
             // Log.d(TAG, msg)
@@ -326,10 +326,6 @@ class MainActivity : AppCompatActivity() {
         val myIntent = Intent(this@MainActivity, ImageEditorActivity::class.java)
         myIntent.putExtra("FILE_PATH", imagePath)
         startActivityForResult(myIntent, newWordActivityRequestCode)
-        /*loadingDialog = BaseActivity.getLoadingDialog(
-            this, "R.string.iamutkarshtiwari_github_io_ananas_loading",
-            false
-        )*/
     }
 
 

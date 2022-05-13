@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,6 @@ import android.widget.LinearLayout
 import com.example.myapplication.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import crop.BaseEditFragment
-import crop.ModuleConfig
 import crop.OnLoadingDialogListener
 import io.reactivex.Single
 import io.reactivex.SingleSource
@@ -26,7 +26,6 @@ import io.reactivex.schedulers.Schedulers
 
 class PaintFragment : BaseEditFragment(), BrushConfigDialog.Properties,
     EraserConfigDialog.Properties, View.OnClickListener {
-    val INDEX: Int = ModuleConfig.INDEX_PAINT
     private lateinit var root: View
     private var backToMenu: View? = null
     private var eraserView: View? = null
@@ -45,18 +44,8 @@ class PaintFragment : BaseEditFragment(), BrushConfigDialog.Properties,
     private val MAX_PERCENT = 100f
     private val compositeDisposable = CompositeDisposable()
     private var loadingDialogListener: OnLoadingDialogListener? = null
-    private var loadingDialog: Dialog? = null
-
-    companion object {
-        fun newInstance(): PaintFragment? {
-            return PaintFragment()
-        }
-    }
 
     override fun onShow() {
-        /*activity?.mode = (ensureEditActivity() ?: return).MODE_PAINT
-        activity?.mPhotograph?.setImageBitmap(ensureEditActivity()?.getMainBit())
-        customPaintView?.visibility = View.VISIBLE*/
     }
 
     override fun backToMain() {
@@ -66,15 +55,18 @@ class PaintFragment : BaseEditFragment(), BrushConfigDialog.Properties,
         customPaintView!!.visibility = View.GONE
     }
 
+    /**
+     *
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         root = inflater.inflate(R.layout.paint, container, false)
-        loadingDialog = BaseActivity.getLoadingDialog(getActivity(),
+        /*loadingDialog = BaseActivity.getLoadingDialog(getActivity(),
             "Loading…",
-            false)
+            false)*/
         val backBtn: View = root.findViewById(R.id.back_to_main)
         backToMenu = root.findViewById(R.id.back_to_main)
         eraserView = root.findViewById<LinearLayout>(R.id.eraser_btn)
@@ -110,6 +102,7 @@ class PaintFragment : BaseEditFragment(), BrushConfigDialog.Properties,
         activity?.mode = (ensureEditActivity() ?: return).MODE_PAINT
         activity?.mPhotograph?.setImageBitmap(activity?.getMainBit())
         customPaintView?.visibility = View.VISIBLE
+
     }
 
     private fun startPaint() {
@@ -146,43 +139,45 @@ class PaintFragment : BaseEditFragment(), BrushConfigDialog.Properties,
         }
     }
 
-    override fun onDestroy() {
-        compositeDisposable.dispose()
-        super.onDestroy()
-    }
-
-    fun savePaintImage() {
+    private fun savePaintImage() {
         val applyPaintDisposable = applyPaint(activity?.getMainBit()!!)
-            ?.flatMap(Function<Bitmap, SingleSource<out Bitmap>> flatMap@{ bitmap: Bitmap? ->
+            .flatMap(Function<Bitmap, SingleSource<out Bitmap>> flatMap@{ bitmap: Bitmap? ->
                 if (bitmap == null) {
                     return@flatMap Single.error<Bitmap>(Throwable("Error occurred while applying paint"))
                 } else {
                     return@flatMap Single.just(bitmap)
                 }
             })
-            ?.subscribeOn(Schedulers.computation())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.doOnSubscribe { _: Disposable? -> loadingDialog?.show() }
-            ?.doFinally { loadingDialog?.dismiss() }
-            ?.subscribe({ bitmap: Bitmap? ->
-                customPaintView?.reset()
-                activity?.changeMainBitmap(bitmap, true)
-                backToMain()
-            }) { _: Throwable? -> }
-        compositeDisposable.add(applyPaintDisposable ?: return)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { loadingDialogListener?.showLoadingDialog() }
+            .doFinally { loadingDialogListener?.dismissLoadingDialog() }
+            .subscribe(
+                { bitmap: Bitmap? ->
+                    customPaintView?.reset()
+                    activity?.changeMainBitmap(bitmap, true)
+                    backToMain()
+                }, { _: Throwable? -> }
+            )
+        compositeDisposable.add(applyPaintDisposable)
     }
 
-    private fun applyPaint(mainBitmap: Bitmap): Single<Bitmap>? {
+
+    override fun onDestroy() {
+        compositeDisposable.dispose()
+        super.onDestroy()
+    }
+
+    private fun applyPaint(mainBitmap: Bitmap): Single<Bitmap> {
         return Single.fromCallable {
             val touchMatrix: Matrix = activity?.mPhotograph?.getImageViewMatrix()!!
             val resultBit = Bitmap.createBitmap(mainBitmap).copy(
-                Bitmap.Config.ARGB_8888, true
-            )
+                Bitmap.Config.ARGB_8888, true)
             val canvas = Canvas(resultBit)
             val data = FloatArray(9)
             touchMatrix.getValues(data)
             val cal = Matrix3(data)
-            val inverseMatrix: Matrix3 = cal.inverseMatrix()
+            val inverseMatrix = cal.inverseMatrix()
             val matrix = Matrix()
             matrix.setValues(inverseMatrix.values)
             handleImage(canvas, matrix)
@@ -202,6 +197,7 @@ class PaintFragment : BaseEditFragment(), BrushConfigDialog.Properties,
         canvas.scale(scale_x, scale_y)
         if (customPaintView?.getPaintBit() != null) {
             canvas.drawBitmap(customPaintView?.getPaintBit() ?: return, 0f, 0f, null)
+            Log.d("GGGGGGGGGGGG", "ddddddddddddddddd")
         }
         canvas.restore()
     }

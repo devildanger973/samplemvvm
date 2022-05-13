@@ -50,25 +50,43 @@
         android:src="@android:drawable/ic_menu_camera"
         app:layout_constraintBottom_toTopOf="@+id/edited"
         app:layout_constraintEnd_toEndOf="parent" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:weightSum="2"
+        >
     <Button
         android:id="@+id/gallery"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:text="gallery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edited"
+        android:layout_weight="1"
         />
+
     <Button
         android:id="@+id/edited"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:text="edited"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/gallery"
+        android:layout_weight="1"
         />
-
+    <Button
+        android:id="@+id/editedHide"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="edited"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:layout_weight="1"
+        />
+    </LinearLayout>
     <!--<include
         layout="@layout/content_main"
         android:layout_width="match_parent"

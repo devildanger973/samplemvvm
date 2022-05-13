@@ -1,5 +1,6 @@
 package paint
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,11 +48,22 @@ class BrushConfigDialog : BottomSheetDialogFragment(), OnSeekBarChangeListener {
                 override fun onItemClick(item: Int) {
                     if (mProperties != null) {
                         //dismiss()
-                        (mProperties ?: return).onColorChanged(item)
+                        mProperties!!.onColorChanged(item)
                     }
                 }
             })
         rvColor.adapter = colorPickerAdapter
+    }
+
+    private fun getKelly22Colors(context: Context): List<Int> {
+        val resources = context.resources
+        val colorList: MutableList<Int> = ArrayList()
+        for (i in 0..21) {
+            val resourceId =
+                resources.getIdentifier("kelly_" + (i + 1), "color", context.packageName)
+            colorList.add(resources.getColor(resourceId))
+        }
+        return colorList
     }
 
     fun setPropertiesChangeListener(properties: PaintFragment) {

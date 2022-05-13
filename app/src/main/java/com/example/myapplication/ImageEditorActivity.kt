@@ -66,7 +66,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     private val id: String = "my_channel_01"
     private var isMultiple: Boolean = false
     private lateinit var listHeroSelected: MutableList<HeroSelected>
-    private lateinit var share: ImageButton
+    var share: ImageButton? = null
     private lateinit var progressBar: ProgressBar
     val MODE_NONE = 0
     val MODE_STICKERS = 1
@@ -82,7 +82,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     private val onMainBitmapChangeListener: OnMainBitmapChangeListener? = null
     protected var isBeenSaved = false
     protected var numberOfOperations = 0
-
+    var save: Button? = null
 
     /**
      *
@@ -198,8 +198,8 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 i = 1
             }
         }
-        val save: Button = findViewById(R.id.save)
-        save.setOnClickListener {
+        save = findViewById(R.id.save)
+        save?.setOnClickListener {
             saveImage(mPhotograph)
         }
         val close: ImageButton = findViewById(R.id.close)
@@ -264,7 +264,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         share = findViewById(R.id.share)
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.GONE
-        share.setOnClickListener {
+        share?.setOnClickListener {
             share()
         }
 //crop

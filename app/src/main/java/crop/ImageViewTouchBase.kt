@@ -804,9 +804,9 @@ abstract class ImageViewTouchBase : AppCompatImageView, IDisposable {
      */
     protected fun getBitmapRect(supportMatrix: Matrix?): RectF? {
         val drawable = drawable ?: return null
-        val m = getImageViewMatrix()
+        val m = getImageViewMatrix(supportMatrix ?: return null)
         mBitmapRect[0f, 0f, drawable.intrinsicWidth.toFloat()] = drawable.intrinsicHeight.toFloat()
-        m?.mapRect(mBitmapRect)
+        m.mapRect(mBitmapRect)
         return mBitmapRect
     }
 

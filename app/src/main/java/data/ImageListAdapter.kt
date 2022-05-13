@@ -59,6 +59,7 @@ class ImageListAdapter(
                 listener.onItemClick(item)
             }
         }
+
     }
 
     /**
