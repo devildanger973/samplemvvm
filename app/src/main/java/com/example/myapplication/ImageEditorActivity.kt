@@ -120,6 +120,7 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     var filterListFragment: FilterListFragment? = null
     private var bitMap: Bitmap? = null
     fun getMainBit(): Bitmap? {
+        Log.d("dang.mai","get bitmap $bitMap")
         return bitMap
     }
 
@@ -284,11 +285,10 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 //increaseOpTimes()
             }
             bitMap = newBit
+            Log.d("dang.mai","bitMap $bitMap")
             mPhotograph?.setImageBitmap(bitMap)
             mPhotograph?.displayType
-            if (mode == MODE_TEXT) {
-                onMainBitmapChangeListener?.onMainBitmapChange()
-            }
+
         }
     }
 

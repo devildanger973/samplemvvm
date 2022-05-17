@@ -81,17 +81,14 @@ class RotateImageView : ImageView {
         if (wrapRect.width() > width) {
             scale = width / wrapRect.width()
         }
+
         canvas.save()
-        canvas.scale(
-            scale, scale, (canvas.width shr 1).toFloat(), (
-                    canvas.height shr 1).toFloat()
-        )
-        canvas.drawRect(wrapRect, bottomPaint ?: return)
-        canvas.rotate(
-            rotateAngle.toFloat(), (canvas.width shr 1).toFloat(), (
-                    canvas.height shr 1).toFloat()
-        )
-        canvas.drawBitmap(bitmap ?: return, srcRect, dstRect!!, null)
+        canvas.scale(scale, scale, (canvas.width shr 1).toFloat(), (
+                canvas.height shr 1).toFloat())
+        canvas.drawRect(wrapRect, bottomPaint!!)
+        canvas.rotate(rotateAngle, (canvas.width shr 1).toFloat(), (
+                canvas.height shr 1).toFloat())
+        canvas.drawBitmap(bitmap!!, srcRect, dstRect!!, null)
         canvas.restore()
     }
 
@@ -104,13 +101,16 @@ class RotateImageView : ImageView {
         matrix.mapRect(wrapRect)
     }
 
+    @Synchronized
+    fun getRotateAngle(): Int {
+        return rotateAngle.toInt()
+    }
+
     /**
      *
      */
-    open fun getImageNewRect(bit: Bitmap?): RectF? {
+    open fun getImageNewRect(): RectF? {
         val m = Matrix()
-        originImageRect!![0f, 0f, bit?.width!!.toFloat()] = bit.height.toFloat()
-
         m.postRotate(rotateAngle, originImageRect!!.centerX(),
             originImageRect!!.centerY())
         m.mapRect(originImageRect)

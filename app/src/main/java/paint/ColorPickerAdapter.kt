@@ -1,6 +1,5 @@
 package paint
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,24 @@ import com.bumptech.glide.Glide
 import com.example.myapplication.R
 
 class ColorPickerAdapter(
-    private val mContext: Context,
-    private val listener: OnItemClickListener
+    private val context: Context,
+    private val listener: OnColorPickerClickListener,
 ) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
-    private val inflater: LayoutInflater = LayoutInflater.from(mContext)
-    private val colorPickerColors: MutableList<Int>
+    RecyclerView.Adapter<ColorPickerAdapter.ViewHolder>() {
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private val colorPickerColors: List<Int>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = inflater.inflate(R.layout.color_picker_item_list, parent, false)
+        val view = inflater.inflate(R.layout.color_picker_item_list, parent, false)
         return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val itemColor = colorPickerColors[position]
+        Glide.with(context).load(itemColor)
+            .into(holder.colorPickerView as ImageView)
+        holder.colorPickerView.setBackgroundColor(colorPickerColors[position])
+        holder.bind(item = itemColor, position)
+
     }
 
     override fun getItemCount(): Int {
@@ -30,12 +38,23 @@ class ColorPickerAdapter(
         /**
          *
          */
-        var colorPickerView: ImageView = itemView.findViewById(R.id.color_picker_view)
-        fun bind(item: Int) {
-            listener.onItemClick(item)
+        var colorPickerView: View = itemView.findViewById(R.id.color_picker_view)
+
+        fun bind(item: Int, position: Int) {
+            colorPickerView.setOnClickListener {
+                listener.onColorPickerClickListener(item)
+            }
         }
+    }
 
-
+    /**
+     *
+     */
+    interface OnColorPickerClickListener {
+        /**
+         *
+         */
+        fun onColorPickerClickListener(colorCode: Int)
     }
 
     private fun getKelly22Colors(context: Context): List<Int> {
@@ -50,28 +69,6 @@ class ColorPickerAdapter(
     }
 
     init {
-        colorPickerColors = getKelly22Colors(mContext).toMutableList()
-    }
-
-    /**
-     *
-     */
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val color = colorPickerColors[position]
-        Glide.with(mContext).load(color)
-            .into((holder as ColorPickerAdapter.ViewHolder).colorPickerView)
-        holder.colorPickerView.setBackgroundColor(colorPickerColors[position])
-        holder.bind(item = color)
-
-    }
-
-    /**
-     *
-     */
-    interface OnItemClickListener {
-        /**
-         *
-         */
-        fun onItemClick(item: Int)
+        colorPickerColors = getKelly22Colors(context)
     }
 }

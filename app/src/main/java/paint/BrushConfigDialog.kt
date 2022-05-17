@@ -1,7 +1,7 @@
 package paint
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +28,7 @@ class BrushConfigDialog : BottomSheetDialogFragment(), OnSeekBarChangeListener {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         return inflater.inflate(R.layout.fragment_brush_config, container, false)
     }
@@ -43,30 +43,18 @@ class BrushConfigDialog : BottomSheetDialogFragment(), OnSeekBarChangeListener {
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         rvColor.layoutManager = layoutManager
         rvColor.setHasFixedSize(true)
-        val colorPickerAdapter =
-            ColorPickerAdapter(requireActivity(), object : ColorPickerAdapter.OnItemClickListener {
-                override fun onItemClick(item: Int) {
-                    if (mProperties != null) {
-                        //dismiss()
-                        mProperties!!.onColorChanged(item)
-                    }
-                }
-            })
+        val colorPickerAdapter = ColorPickerAdapter(requireActivity(), object:
+            ColorPickerAdapter.OnColorPickerClickListener {
+            override fun onColorPickerClickListener(colorCode: Int) {
+                    dismiss()
+                    mProperties!!.onColorChanged(colorCode)
+                    Log.d("nhan.123123123123", "$colorCode")
+            }
+        })
         rvColor.adapter = colorPickerAdapter
     }
 
-    private fun getKelly22Colors(context: Context): List<Int> {
-        val resources = context.resources
-        val colorList: MutableList<Int> = ArrayList()
-        for (i in 0..21) {
-            val resourceId =
-                resources.getIdentifier("kelly_" + (i + 1), "color", context.packageName)
-            colorList.add(resources.getColor(resourceId))
-        }
-        return colorList
-    }
-
-    fun setPropertiesChangeListener(properties: PaintFragment) {
+    fun setPropertiesChangeListener(properties: Properties?) {
         mProperties = properties
     }
 

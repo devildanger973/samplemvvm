@@ -27,11 +27,11 @@
         android:id="@+id/rotate"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/ic_baseline_crop_rotate_30"
         android:foreground="?selectableItemBackground"
         app:layout_constraintEnd_toStartOf="@+id/rotate_right"
-        app:layout_constraintHorizontal_bias="0.565"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toEndOf="@+id/rotate_left"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +40,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="68dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/ic_baseline_keyboard_arrow_right_24"
         android:foreground="?selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
