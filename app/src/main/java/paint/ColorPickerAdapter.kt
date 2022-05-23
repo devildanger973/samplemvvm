@@ -72,3 +72,4 @@ class ColorPickerAdapter(
         colorPickerColors = getKelly22Colors(context)
     }
 }
+

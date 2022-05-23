@@ -1,5 +1,6 @@
 package implement.swipe.views
 
+import add.text.AddTextFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,10 +53,10 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
         collectionAdapter.addFragment(CropFragment(), "Crop")
         collectionAdapter.addFragment(PaintFragment(), "Paint")
         collectionAdapter.addFragment(FilterListFragment(), "Filter")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Saturation")
+        collectionAdapter.addFragment(AddTextFragment(), "AddText")
         collectionAdapter.addFragment(DemoObjectFragment(), "Brightness")
         collectionAdapter.addFragment(DemoObjectFragment(), "Portrait")
-        collectionAdapter.addFragment(DemoObjectFragment(), "AddText")
+        collectionAdapter.addFragment(DemoObjectFragment(), "Saturation")
         collectionAdapter.addFragment(DemoObjectFragment(), "Sticker")
         collectionAdapter.addFragment(DemoObjectFragment(), "SupportAction")
         collectionAdapter.notifyDataSetChanged()

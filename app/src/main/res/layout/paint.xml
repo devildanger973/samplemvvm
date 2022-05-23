@@ -50,16 +50,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <ImageView
         android:id="@+id/apply_paint"
-        android:foreground="?selectableItemBackground"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/ic_baseline_check_24"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        />
+        android:background="@drawable/ic_baseline_check_24"
+        android:foreground="?selectableItemBackground" />
     <LinearLayout
         android:id="@+id/settings"
         android:layout_width="wrap_content"

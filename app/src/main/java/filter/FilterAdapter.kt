@@ -12,9 +12,9 @@ class FilterAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val filters: Array<String> =
-        filterListFragment.resources.getStringArray(R.array.iamutkarshtiwari_github_io_ananas_filters)
+        filterListFragment.resources.getStringArray(R.array.filters)
     private val filterImages: Array<String> =
-        filterListFragment.resources.getStringArray(R.array.iamutkarshtiwari_github_io_ananas_filter_drawable_list)
+        filterListFragment.resources.getStringArray(R.array.filter_drawable_list)
 
     override fun getItemCount(): Int {
         return filterImages.size

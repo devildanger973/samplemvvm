@@ -156,6 +156,21 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:visibility="gone" />
+
+        <add.text.ZoomLayout
+            android:id="@+id/text_sticker_panel_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <add.text.TextStickerView
+                android:id="@+id/text_sticker_panel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+        </add.text.ZoomLayout>
+
         <com.theartofdev.edmodo.cropper.CropImageView
             android:id="@+id/crop_panel"
             android:layout_width="fill_parent"

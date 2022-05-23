@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import add.text.AddTextFragment
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -38,7 +39,6 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
-import crop.CropFragment
 import crop.ImageViewTouch
 import crop.OnLoadingDialogListener
 import crop.OnMainBitmapChangeListener
@@ -46,7 +46,6 @@ import crop.rotate.RotateImageView
 import filter.FilterListFragment
 import implement.swipe.views.CollectionFragment
 import paint.CustomPaintView
-import paint.PaintFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -79,10 +78,11 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     val MODE_BRIGHTNESS = 8
     val MODE_SATURATION = 9
     var mode: Int = MODE_NONE
-    private val onMainBitmapChangeListener: OnMainBitmapChangeListener? = null
+    private var onMainBitmapChangeListener: OnMainBitmapChangeListener? = null
     protected var isBeenSaved = false
     protected var numberOfOperations = 0
     var save: Button? = null
+    var addTextFragment: AddTextFragment? = null
 
     /**
      *
@@ -120,14 +120,13 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
     var filterListFragment: FilterListFragment? = null
     private var bitMap: Bitmap? = null
     fun getMainBit(): Bitmap? {
-        Log.d("dang.mai","get bitmap $bitMap")
         return bitMap
     }
 
     //paint
     var paintView: CustomPaintView? = null
 
-    public fun getCrop(): CropImageView? {
+    fun getCrop(): CropImageView? {
         return cropPanelEdited
     }
 
@@ -275,7 +274,13 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         filterListFragment = FilterListFragment.newInstance()
 //paint
         paintView = findViewById(R.id.custom_paint_view)
+        //setOnMainBitmapChangeListener(addTextFragment!!)
+
     }
+
+//    private fun setOnMainBitmapChangeListener(listener: OnMainBitmapChangeListener) {
+//        onMainBitmapChangeListener = listener
+//    }
 
     fun changeMainBitmap(newBit: Bitmap?, needPushUndoStack: Boolean) {
         if (newBit == null) return
@@ -285,7 +290,6 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
                 //increaseOpTimes()
             }
             bitMap = newBit
-            Log.d("dang.mai","bitMap $bitMap")
             mPhotograph?.setImageBitmap(bitMap)
             mPhotograph?.displayType
 

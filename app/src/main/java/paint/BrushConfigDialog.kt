@@ -43,12 +43,12 @@ class BrushConfigDialog : BottomSheetDialogFragment(), OnSeekBarChangeListener {
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         rvColor.layoutManager = layoutManager
         rvColor.setHasFixedSize(true)
-        val colorPickerAdapter = ColorPickerAdapter(requireActivity(), object:
+        val colorPickerAdapter = ColorPickerAdapter(requireActivity(), object :
             ColorPickerAdapter.OnColorPickerClickListener {
             override fun onColorPickerClickListener(colorCode: Int) {
-                    dismiss()
-                    mProperties!!.onColorChanged(colorCode)
-                    Log.d("nhan.123123123123", "$colorCode")
+                dismiss()
+                mProperties!!.onColorChanged(colorCode)
+                Log.d("nhan.123123123123", "$colorCode")
             }
         })
         rvColor.adapter = colorPickerAdapter

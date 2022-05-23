@@ -16,7 +16,7 @@ import android.view.ViewConfiguration
 
 class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
     ImageViewTouchBase(context, attrs) {
-    protected var mScaleDetector: ScaleGestureDetector? = null
+    protected var mScaleDetectorScale: ScaleGestureDetector? = null
     protected var mGestureDetector: GestureDetector? = null
     protected var mTouchSlop = 0
     protected var mScaleFactor = 0f
@@ -34,7 +34,7 @@ class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
         mTouchSlop = ViewConfiguration.get(context).scaledTouchSlop
         mGestureListener = gestureListener
         mScaleListener = scaleListener
-        mScaleDetector = ScaleGestureDetector(context, mScaleListener)
+        mScaleDetectorScale = ScaleGestureDetector(context, mScaleListener)
         mGestureDetector = GestureDetector(
             context, mGestureListener,
             null, true
@@ -77,8 +77,8 @@ class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        mScaleDetector!!.onTouchEvent(event)
-        if (!mScaleDetector!!.isInProgress) {
+        mScaleDetectorScale!!.onTouchEvent(event)
+        if (!mScaleDetectorScale!!.isInProgress) {
             mGestureDetector!!.onTouchEvent(event)
         }
         val action = event.action
@@ -132,7 +132,7 @@ class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
         if (!mScrollEnabled) return false
         if (e1 == null || e2 == null) return false
         if (e1.pointerCount > 1 || e2.pointerCount > 1) return false
-        if (mScaleDetector!!.isInProgress) return false
+        if (mScaleDetectorScale!!.isInProgress) return false
         if (scale === 1f) return false
         mUserScaled = true
         // scrollBy(distanceX, distanceY);
@@ -160,7 +160,7 @@ class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
             mFlingListener!!.onFling(e1, e2, velocityX, velocityY)
         }
         if (e1.pointerCount > 1 || e2.pointerCount > 1) return false
-        if (mScaleDetector!!.isInProgress) return false
+        if (mScaleDetectorScale!!.isInProgress) return false
         if (scale === 1f) return false
         val diffX = e2.x - e1.x
         val diffY = e2.y - e1.y
@@ -240,7 +240,7 @@ class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
 
         override fun onLongPress(e: MotionEvent) {
             if (isLongClickable) {
-                if (!mScaleDetector!!.isInProgress) {
+                if (!mScaleDetectorScale!!.isInProgress) {
                     isPressed = true
                     performLongClick()
                 }
@@ -264,9 +264,9 @@ class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
 
     inner class ScaleListener : SimpleOnScaleGestureListener() {
         protected var mScaled = false
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-            val span = detector.currentSpan - detector.previousSpan
-            var targetScale = scale * detector.scaleFactor
+        override fun onScale(detectorScale: ScaleGestureDetector): Boolean {
+            val span = detectorScale.currentSpan - detectorScale.previousSpan
+            var targetScale = scale * detectorScale.scaleFactor
             // System.out.println("span--->" + span);
             if (mScaleEnabled) {
                 if (mScaled && span != 0f) {
@@ -276,8 +276,8 @@ class ImageViewTouch(context: Context?, attrs: AttributeSet?) :
                         Math.max(targetScale, minScale - 0.1f)
                     )
                     zoomTo(
-                        targetScale, detector.focusX,
-                        detector.focusY
+                        targetScale, detectorScale.focusX,
+                        detectorScale.focusY
                     )
                     mDoubleTapDirection = 1
                     invalidate()
