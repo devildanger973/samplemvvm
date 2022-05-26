@@ -92,7 +92,6 @@ class AddItemActivity : AppCompatActivity() {
             }
             mHeroAdapter.setList(mHeros)
         }
-        Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
     }
 
     private fun startImageList(imagePath: List<String>) {

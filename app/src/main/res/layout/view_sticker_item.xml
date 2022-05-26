@@ -1,0 +1,8 @@
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/img"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:foreground="?selectableItemBackground"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:scaleType="centerInside" />

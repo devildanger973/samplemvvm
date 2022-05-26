@@ -52,6 +52,7 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_collection_object.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_edit_image_add_text.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_edit_image_crop.xml" value="0.19701086956521738" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_edit_image_sticker_type.xml" value="0.19610507246376813" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_eraser_config.xml" value="0.2384428223844282" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/fragment_overview.xml" value="0.17074275362318841" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/grid_view_item.xml" value="0.13072916666666667" />
@@ -66,6 +67,8 @@
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/item_selected_add.xml" value="0.67" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/paint.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/recyclerview_item.xml" value="0.19701086956521738" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/view_sticker_item.xml" value="0.19610507246376813" />
+        <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/view_sticker_type_item.xml" value="0.19610507246376813" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/layout/view_text_sticker_item.xml" value="0.19701086956521738" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/menu/contextual_action_bar.xml" value="0.22" />
         <entry key="..\:/project2/samplemvvm2/app/src/main/res/menu/top_app_bar.xml" value="0.20416666666666666" />

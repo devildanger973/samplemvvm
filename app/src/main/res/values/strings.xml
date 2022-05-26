@@ -14,12 +14,43 @@
     <string name="hint_word">Word...</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Word not saved because it is empty.</string>
+    <string name="saving_image">Saving…</string>
+
+    <item type="id" translatable="false" name="TAG_STICKERS_COUNT" />
+
+    <item type="id" translatable="false" name="TAG_STICKERS_PATH" />
+    <integer-array translatable="false" name="count">
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>3</item>
+        <item>5</item>
+    </integer-array>
+
+    <string-array name="names">
+        <item>Type 1</item>
+        <item>Type 2</item>
+        <item>Type 3</item>
+        <item>Type 4</item>
+        <item>Type 5</item>
+        <item>Type 6</item>
+    </string-array>
+
+    <string-array translatable="false" name="types">
+        <item>type1</item>
+        <item>type2</item>
+        <item>type3</item>
+        <item>type4</item>
+        <item>type5</item>
+        <item>type6</item>
+    </string-array>
 
     <string name="size">Size</string>
 
 
 
-    <string name="error">Failed to load the image!</string>
+    <string name="error">Error!</string>
 
 
     <string-array name="filters">

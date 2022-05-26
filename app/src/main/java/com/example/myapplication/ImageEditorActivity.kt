@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import add.text.AddTextFragment
+import add.text.TextStickerView
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -46,6 +47,8 @@ import crop.rotate.RotateImageView
 import filter.FilterListFragment
 import implement.swipe.views.CollectionFragment
 import paint.CustomPaintView
+import sticker.StickerFragment
+import sticker.StickerView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -123,12 +126,24 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
         return bitMap
     }
 
-    //paint
+    /**
+     *
+     *///paint
     var paintView: CustomPaintView? = null
 
+    /**
+     *
+     */
     fun getCrop(): CropImageView? {
         return cropPanelEdited
     }
+//sticker
+    /**
+     *
+     */
+    var stickerView: StickerView? = null
+    var stickerFragment: StickerFragment? = null
+
 
     /**
      *
@@ -167,7 +182,6 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
             }
             bitMap = BitmapFactory.decodeFile((list ?: return).first())
         }
-        Log.d("mHeroSelectedaaaaaaaaaaaa", "$list")
         mRecyclerSelected = findViewById(R.id.recyclerListSelected)
         mItemSelectedAdapter =
             ItemSelectedAdapter(this, object : ItemSelectedAdapter.OnItemClickListener {
@@ -275,7 +289,9 @@ class ImageEditorActivity : AppCompatActivity(), OnLoadingDialogListener {
 //paint
         paintView = findViewById(R.id.custom_paint_view)
         //setOnMainBitmapChangeListener(addTextFragment!!)
-
+//sticker
+        stickerView = findViewById(R.id.sticker_panel)
+        stickerFragment = StickerFragment().newInstance()
     }
 
 //    private fun setOnMainBitmapChangeListener(listener: OnMainBitmapChangeListener) {

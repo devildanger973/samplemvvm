@@ -39,6 +39,14 @@ class AddTextFragment : BaseEditFragment(), OnPhotoEditorListener, View.OnClickL
     private var textEditorDialogFragment: TextEditorDialogFragment? = null
     private val compositeDisposable = CompositeDisposable()
 
+
+    override fun onResume() {
+        super.onResume()
+        if (isVisible) {
+            view()
+        }
+    }
+
     /**
      *
      */
@@ -203,12 +211,6 @@ class AddTextFragment : BaseEditFragment(), OnPhotoEditorListener, View.OnClickL
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (isVisible) {
-            view()
-        }
-    }
 
     private fun getTextStickerLayout(): View? {
         val layoutInflater = LayoutInflater.from(context)

@@ -16,6 +16,7 @@ import crop.*
 import filter.FilterListFragment
 import io.reactivex.disposables.CompositeDisposable
 import paint.PaintFragment
+import sticker.StickerFragment
 
 /**
  *
@@ -54,11 +55,7 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
         collectionAdapter.addFragment(PaintFragment(), "Paint")
         collectionAdapter.addFragment(FilterListFragment(), "Filter")
         collectionAdapter.addFragment(AddTextFragment(), "AddText")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Brightness")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Portrait")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Saturation")
-        collectionAdapter.addFragment(DemoObjectFragment(), "Sticker")
-        collectionAdapter.addFragment(DemoObjectFragment(), "SupportAction")
+        collectionAdapter.addFragment(StickerFragment(), "Sticker")
         collectionAdapter.notifyDataSetChanged()
         viewPager.adapter = collectionAdapter
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -66,21 +63,38 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
             viewPager.setCurrentItem(2, false)
             tabLayout.setOnClickListener(this)
         }.attach()
-        viewPager.offscreenPageLimit=1
+        viewPager.offscreenPageLimit = 1
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (position == 0) {
                     ensureEditActivity()?.getCrop()?.visibility = View.VISIBLE
                     ensureEditActivity()?.paintView?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.clear()
 
                 } else if (position == 1) {
                     ensureEditActivity()?.paintView?.visibility = View.VISIBLE
                     ensureEditActivity()?.getCrop()?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.clear()
 
                 } else if (position == 2) {
                     ensureEditActivity()?.paintView?.visibility = View.GONE
                     ensureEditActivity()?.getCrop()?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.clear()
+
+                } else if (position == 3) {
+                    ensureEditActivity()?.paintView?.visibility = View.GONE
+                    ensureEditActivity()?.getCrop()?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.clear()
+
+                } else if (position == 4) {
+                    ensureEditActivity()?.paintView?.visibility = View.GONE
+                    ensureEditActivity()?.getCrop()?.visibility = View.GONE
+                    ensureEditActivity()?.stickerView?.visibility = View.VISIBLE
 
                 }
 
@@ -100,52 +114,9 @@ open class CollectionFragment : BaseEditFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
 
     }
-/*
-    open fun onFilterClick() {
-        viewPager.currentItem = FilterListFragment().INDEX
-        activity?.filterListFragment?.viewImage()
 
-    }
-
-    open fun onCropClick() {
-        viewPager.currentItem = CropFragment().INDEX
-        activity?.cropFragment?.viewImage()
-
-    }
-
-    open fun onPaintClick() {
-        viewPager.currentItem = PaintFragment().INDEX
-        activity?.paintFragment?.viewImage()
-
-    }*/
 }
 
 private const val ARG_OBJECT = "object"
 
-/**
- *
- */
-class DemoObjectFragment : Fragment() {
-
-    /**
-     *
-     */
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return inflater.inflate(R.layout.fragment_collection_object, container, false)
-    }
-
-    /**
-     *
-     */
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            val textView: TextView = view.findViewById(android.R.id.text1)
-            textView.text = getInt(ARG_OBJECT).toString()
-        }
-    }
-}
 
